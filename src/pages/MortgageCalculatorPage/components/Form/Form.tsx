@@ -1,26 +1,30 @@
 import type { FC } from "react";
-import LoanAmount from "./components/LoanAmount";
-import LoanTerm from "./components/LoanTerm";
-import InterestRate from "./components/InterestRate";
+import InputField from "./components/InputField";
+import StarRateField from "./components/StarRateField";
+import { useFormContext, useWatch } from "react-hook-form";
+import type { Schema } from "../../MortgageCalculatorPage";
+import EmployedField from "./components/EmployedField";
 
 interface Props {
-  onSubmit: () => void;
+  onSubmit: (data: Schema) => void;
 }
 const Form: FC<Props> = ({ onSubmit }) => {
+  const { handleSubmit, control } = useFormContext<Schema>();
+    const employmentStatus = useWatch({control, name: 'employed'})
+
   return (
     <form
-      onSubmit={onSubmit}
-      className="mx-auto grid w-100 grid-cols-[auto_1fr] gap-4"
+      onSubmit={handleSubmit(onSubmit)}
+      className="grid w-120 grid-cols-[auto_1fr] gap-2 mx-auto"
     >
-      <LoanAmount />
-      <LoanTerm />
-      <InterestRate />
-      <button
-        className="py-0.5 w-fit cursor-pointer rounded border border-gray-400 bg-gray-200 px-2"
-        type="submit"
-      >
-        Send
-      </button>
+      <InputField name="loanAmount" label="Loan Amount" />
+      <InputField name="loanTerm" label="Loan Term" />
+      <InputField name="interestRate" label="Interest Rate" />
+      <EmployedField />
+      {employmentStatus === true &&  <InputField name='salary' label="Salary"/>}
+      {employmentStatus === false &&  <InputField name='centlink' label="Centlink"/>}
+      <StarRateField />
+      <button type="submit">Submit</button>
     </form>
   );
 };
