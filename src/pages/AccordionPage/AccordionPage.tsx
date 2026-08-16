@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import Accordion from "./components";
+import Accordion from "./components/Accordion";
 
 const DATA = [
   {
@@ -19,12 +19,12 @@ const DATA = [
   },
 ];
 
-const AccordionPage: FC = () =>
-  DATA.map((item, i) => (
-    <>
+const AccordionPage: FC = () => (
+  <div className="">
+    {DATA.map((item, i) => (
       <Accordion key={i} title={item.title} content={item.content} />
-      {i < DATA.length - 1 && <hr className="mx-2 text-gray-200" />}
-    </>
-  ));
+    ))}
+  </div>
+);
 
 export default AccordionPage;
