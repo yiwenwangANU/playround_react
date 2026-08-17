@@ -3,7 +3,7 @@ import { useController, useFormContext } from "react-hook-form";
 import type { Schema } from "../../../../MortgageCalculatorPage";
 
 interface Props {
-  name: "loanAmount" | "loanTerm" | "interestRate" | "salary" | 'centlink';
+  name: "loanAmount" | "loanTerm" | "interestRate";
   label: string;
 }
 
@@ -12,17 +12,17 @@ const InputField: FC<Props> = ({ name, label }) => {
     control,
     formState: { errors },
   } = useFormContext<Schema>();
-  const { field } = useController({ name, control });
+  const { field } = useController({ control, name });
 
   return (
     <>
       <label htmlFor={name}>{label}:</label>
       <input
-        className="border px-2"
-        value={field.value}
+        className="border-1 px-1 py-0.5"
+        id={name}
+        {...field}
         onChange={(e) => field.onChange(e.target.valueAsNumber)}
         type="number"
-        id={name}
       />
       {errors[name] && (
         <span className="col-span-2 text-red-500">{errors[name].message}</span>
