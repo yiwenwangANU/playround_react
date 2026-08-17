@@ -13,7 +13,7 @@ const schema = z
     return: z.iso.date().optional(),
   })
   .superRefine((data, ctx) => {
-    const tomorrow = format(addDays(new Date(), 1), 'yyyy-MM-dd')
+    const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
     if (tomorrow > data.departure) {
       ctx.addIssue({
         code: "custom",
