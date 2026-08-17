@@ -27,10 +27,10 @@ const GenerateTablePage: FC = () => {
   };
   const [tableInputs, setTableInputs] = useState<TableInputs | null>(null);
 
-  const onSubmit = (data: Schema) => {
+  const onSubmit = ({ rows, cols }: Schema) => {
     setTableInputs({
-      rows: data.rows,
-      cols: data.cols,
+      rows,
+      cols,
     });
   };
 
