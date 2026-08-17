@@ -1,1 +1,1 @@
-export {default} from './FlightBookerPage'
+export { default } from "./FlightBookerPage";
