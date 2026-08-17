@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
@@ -21,8 +21,17 @@ const GenerateTablePage: FC = () => {
     resolver: zodResolver(schema),
   });
 
+  type TableInputs = {
+    rows: number;
+    cols: number;
+  };
+  const [tableInputs, setTableInputs] = useState<TableInputs | null>(null);
+
   const onSubmit = (data: Schema) => {
-    console.log(data);
+    setTableInputs({
+      rows: data.rows,
+      cols: data.cols,
+    });
   };
 
   return (
@@ -30,12 +39,7 @@ const GenerateTablePage: FC = () => {
       <FormProvider {...methods}>
         <Form onSubmit={methods.handleSubmit(onSubmit)} />
       </FormProvider>
-      {methods.formState.isSubmitSuccessful && (
-        <Table
-          rows={methods.getValues("rows")}
-          cols={methods.getValues("cols")}
-        />
-      )}
+      {tableInputs && <Table rows={tableInputs.rows} cols={tableInputs.cols} />}
     </div>
   );
 };
