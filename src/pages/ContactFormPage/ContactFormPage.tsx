@@ -1,61 +1,49 @@
 import type { FC } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Input from "../../components/Input";
+import InputField from "./components/InputField";
+import TextareaField from "./components/TextareaField";
 import Button from "../../components/Button";
 import useCreateMessage from "./hooks/useCreateMessage";
 
-const URL = 'https://questions.greatfrontend.com/api/questions/contact-form '
+const URL = "https://questions.greatfrontend.com/api/questions/contact-form";
 
-export const schema = z.object({
-  name: z.string().min(1, "Invalid Name"),
+const schema = z.object({
+  name: z.string().min(1, "Name is required"),
   email: z.email("Invalid Email"),
-  message: z.string().min(1, "Invalid Message"),
+  message: z.string().min(1, "Message is required"),
 });
 
+export type Schema = z.infer<typeof schema>;
+
 const ContactFormPage: FC = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const methods = useForm({
     resolver: zodResolver(schema),
+    defaultValues: { name: "", email: "", message: "" },
   });
 
-  const {data, isMutating, error, trigger} = useCreateMessage(URL)
+  const { data, trigger, isMutating, error } = useCreateMessage(URL);
+
+  const onSubmit = (data: Schema) => trigger(data);
 
   return (
-    <form
-      className="mx-auto flex w-200 flex-col gap-2"
-      onSubmit={handleSubmit((data) => {
-        trigger(data);
-      })}
-    >
-      <label htmlFor="name">Name</label>
-      <Input {...register("name")} id="name" />
-      {errors.name && (
-        <span className="text-red-500">{errors.name.message}</span>
-      )}
-      <label htmlFor="email">Email</label>
-      <Input {...register("email")} id="email" />
-      {errors.email && (
-        <span className="text-red-500">{errors.email.message}</span>
-      )}
-      <label htmlFor="message">Message</label>
-      <textarea
-        className="border-1 p-1"
-        {...register("message")}
-        id="message"
-      />
-      {errors.message && (
-        <span className="text-red-500">{errors.message.message}</span>
-      )}
-      <Button type="submit" disabled={isMutating}>Send</Button>
-      {error && <div className="text-red-500">Something went wrong...</div>}
-      {isMutating && <div className="text-green-200">Sending form data...</div>}
-      {data && <div className="text-green-500">{data}</div>}
-    </form>
+    <FormProvider {...methods}>
+      <form
+        onSubmit={methods.handleSubmit(onSubmit)}
+        className="mx-auto flex w-120 flex-col justify-center gap-2"
+      >
+        <InputField name="name" label="Name" />
+        <InputField name="email" label="Email" />
+        <TextareaField name="message" label="Message" />
+        <Button type="submit" className="w-fit" disabled={isMutating}>
+          {isMutating ? 'Sending... ' : 'Submit'}
+        </Button>
+        {isMutating && <span>Sending data...</span>}
+        {error && <span className="text-red-500">Something went wrong...</span>}
+        {data && <span className="text-green-700">{data}</span>}
+      </form>
+    </FormProvider>
   );
 };
 

@@ -2,15 +2,16 @@ import type { ComponentProps, FC, ReactNode } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const button = tv({
-  base: "inline-flex cursor-pointer items-center justify-center rounded px-4 py-1.5 font-medium select-none",
+  base: "inline-flex cursor-pointer items-center rounded-full font-medium select-none",
   variants: {
     variant: {
-      primary: "bg-gray-200 border-1 border-gray-400",
+      primary: "bg-zinc-900 text-white",
       secondary: "bg-zinc-100 text-zinc-900",
       tertiary: "text-zinc-600",
     },
     size: {
-      md: "h-8 px-2",
+      sm: "text-sm px-3 py-1",
+      md: "text-base px-4 py-2",
     },
   },
   defaultVariants: {
@@ -21,14 +22,14 @@ const button = tv({
 
 interface Props
   extends
-    Omit<ComponentProps<"button">, "className" | "children">,
+    Omit<ComponentProps<"button">, "children" | "className">,
     VariantProps<typeof button> {
-  className?: string;
   children: ReactNode;
+  className: string;
 }
 
-const Button: FC<Props> = ({ variant, size, children, className, ...rest }) => (
-  <button className={button({ variant, size, className })} {...rest}>
+const Button: FC<Props> = ({ children, className, variant, size, ...rest }) => (
+  <button className={button({ className, variant, size })} {...rest}>
     {children}
   </button>
 );
