@@ -1,1 +1,1 @@
-export {default} from './useLike'
+export { default } from "./useLike";

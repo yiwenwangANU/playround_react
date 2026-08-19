@@ -5,8 +5,10 @@ const button = tv({
   base: "inline-flex cursor-pointer items-center justify-center rounded-full px-4 py-1.5 font-medium select-none",
   variants: {
     variant: {
-      primary: "bg-[#888] text-[#888] hover:bg-[#f00] hover:text-[#f00]",
-      secondary: "bg-[#f00] text-white hover:bg-[#f00] hover:text-[#f00]",
+      primary:
+        "border-[#888] border text-[#888] hover:border-[#f00] hover:text-[#f00]",
+      secondary:
+        "bg-[#f00] text-white border hover:border-[#f00] hover:bg-white hover:text-[#f00]",
     },
   },
   defaultVariants: {
