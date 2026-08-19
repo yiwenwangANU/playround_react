@@ -19,6 +19,7 @@ const TodoListPage: FC = () => {
         className="border border-black px-1 py-0.5"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        placeholder="Add your task"
       />
       <button
         className="cursor-pointer border border-gray-400 bg-gray-200 px-2 py-0.5"
