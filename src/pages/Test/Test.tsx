@@ -1,15 +1,17 @@
-import type { FC } from "react";
+import { useState, type FC } from "react";
+import ProgressBar from "./components/ProgressBar";
 
-const Test: FC = () => (
-  <div className="fixed inset-0 flex flex-col text-center">
-    <header className="h-12 bg-orange-700">Header</header>
-    <div className="flex grow">
-      <nav className="w-20 bg-orange-500">Navigation</nav>
-      <main className="grow bg-orange-200">Main</main>
-      <aside className="w-20 bg-amber-400">Sidebar</aside>
-    </div>
-    <footer className="h-20 bg-gray-600">Footer</footer>
-  </div>
-);
+const Test: FC = () => {
+  const [barNum, setBarNum] = useState<number>(0);
+
+  return (
+    <>
+      {Array.from({ length: barNum }, () => (
+        <ProgressBar />
+      ))}
+      <button onClick={() => setBarNum((prev) => prev + 1)}>Add</button>
+    </>
+  );
+};
 
 export default Test;
