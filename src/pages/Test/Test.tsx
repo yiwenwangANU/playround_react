@@ -1,44 +1,64 @@
-import { useState, type FC } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import type { FC } from "react";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Form from "./components/Form";
-import Calculator from "./components/Calculator";
+import FlightSelector from "./components/FlightSelector";
+import DatePicker from "./components/DatePicker/DatePicker";
 
-const schema = z.object({
-  loanAmount: z
-    .number("Please enter a postive number")
-    .min(0, "Please enter a postive number"),
-  loanTerm: z
-    .number("Please enter a postive integer")
-    .int("Please enter a postive integer")
-    .min(0, "Please enter a postive integer"),
-  interestRate: z
-    .number("Please enter a postive number")
-    .min(0, "Please enter a postive number"),
-});
+const schema = z
+  .object({
+    flightType: z.enum(["oneWay", "roundTrip"]),
+    departure: z.iso.date(),
+    return: z.iso.date().optional(),
+  })
+  .superRefine((data, ctx) => {
+    const today = new Date().toISOString();
+    if (data.departure <= today) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Departure date should no early than today.",
+        path: ["departure"],
+      });
+    }
+    if (data.flightType === "roundTrip" && !data.return) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Please choose return date.",
+        path: ["return"],
+      });
+      return;
+    }
+    if (data.return && data.departure > data.return) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Return date should no early than departure date.",
+        path: ["return"],
+      });
+    }
+  });
 
 export type Schema = z.infer<typeof schema>;
 
 const Test: FC = () => {
   const methods = useForm({
+    shouldUnregister: true,
     resolver: zodResolver(schema),
-    defaultValues: {
-      loanAmount: 100000,
-      loanTerm: 30,
-      interestRate: 3,
-    },
   });
-  const [loanData, setLoanData] = useState<Schema | null>(null);
+
+  const flightTypeValue = useWatch({control: methods.control, name: 'flightType'})
 
   const onSubmit = (data: Schema) => {
-    setLoanData(data);
+    console.log(data);
   };
 
   return (
     <FormProvider {...methods}>
-      <Form onSubmit={methods.handleSubmit(onSubmit)} />
-      {loanData && <Calculator {...loanData} />}
+      <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-2 w-100 mx-auto">
+        <FlightSelector />
+        <DatePicker name="departure" />
+        {flightTypeValue ==='roundTrip' && <DatePicker name="return" />}
+        <button type="submit" className="w-fit">Submit</button>
+      </form>
     </FormProvider>
   );
 };
