@@ -1,8 +1,9 @@
-import { type FC } from "react";
+import { useState, type FC } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Form from "./components/Form";
+import Calculator from "./components/Calculator";
 
 const schema = z.object({
   loanAmount: z
@@ -28,13 +29,16 @@ const Test: FC = () => {
       interestRate: 3,
     },
   });
+  const [loanData, setLoanData] = useState<Schema | null>(null);
 
   const onSubmit = (data: Schema) => {
-    console.log(data);
+    setLoanData(data);
   };
+
   return (
     <FormProvider {...methods}>
       <Form onSubmit={methods.handleSubmit(onSubmit)} />
+      {loanData && <Calculator {...loanData} />}
     </FormProvider>
   );
 };
