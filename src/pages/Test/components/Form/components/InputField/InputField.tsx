@@ -15,7 +15,7 @@ const InputField: FC<Props> = ({ label, name }) => {
   const { field } = useController({ control, name });
 
   return (
-    <div>
+    <>
       <label>{label}:</label>
       <input
         className="border border-black px-1 py-0.5"
@@ -23,8 +23,10 @@ const InputField: FC<Props> = ({ label, name }) => {
         {...field}
         onChange={(e) => field.onChange(e.target.valueAsNumber)}
       />
-      {errors[name] && <span className="text-red-500 col-span-2">{errors[name].message}</span>}
-    </div>
+      {errors[name] && (
+        <span className="col-span-2 text-red-500">{errors[name].message}</span>
+      )}
+    </>
   );
 };
 

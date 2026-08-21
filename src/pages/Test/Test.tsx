@@ -29,12 +29,12 @@ const Test: FC = () => {
     },
   });
 
-  const onSubmit = (data:Schema) => {
-    console.log(data)
-  }
+  const onSubmit = (data: Schema) => {
+    console.log(data);
+  };
   return (
     <FormProvider {...methods}>
-      <Form onSubmit={methods.handleSubmit(onSubmit)}/>
+      <Form onSubmit={methods.handleSubmit(onSubmit)} />
     </FormProvider>
   );
 };
