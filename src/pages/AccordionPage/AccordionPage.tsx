@@ -20,7 +20,7 @@ const DATA = [
 ];
 
 const AccordionPage: FC = () => (
-  <div className="">
+  <div role="group" aria-label="Accordion">
     {DATA.map((item, i) => (
       <Accordion key={i} title={item.title} content={item.content} />
     ))}
