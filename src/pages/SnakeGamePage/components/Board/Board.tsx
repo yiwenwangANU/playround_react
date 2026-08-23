@@ -34,6 +34,21 @@ const KEY_TO_DIRECTION: Record<string, Direction> = {
 };
 
 const isSameCell = (a: Cell, b: Cell) => a.x === b.x && a.y === b.y;
+const isOutsideBorder = (cell: Cell) => {
+  if (cell.x >= GRID_WIDTH || cell.x < 0 || cell.y >= GRID_HEIGHT || cell.y < 0)
+    return true;
+  return false;
+};
+const isInsideCurrentSnake = (cell: Cell, currentSnake: Cell[]) =>
+  currentSnake.slice(0, -1).some((segment) => isSameCell(segment, cell));
+const getNextAutoMove = (currentSnake: Cell[]) => {
+  const head = currentSnake[0];
+  const neck = currentSnake[1];
+  if (head.x === neck.x && head.y <= neck.y) return "up";
+  if (head.x === neck.x && head.y > neck.y) return "down";
+  if (head.y === neck.y && head.x <= neck.x) return "left";
+  return "right";
+};
 
 const Board: FC = () => {
   const [apple, setApple] = useState<Cell>(INITIAL_APPLE);
@@ -67,8 +82,13 @@ const Board: FC = () => {
       const newHead = { x: head.x + delta.x, y: head.y + delta.y };
 
       if (isSameCell(neck, newHead)) return prev;
+      if (isOutsideBorder(newHead) || isInsideCurrentSnake(newHead, prev)) {
+        setGameEnd(true);
+        return prev;
+      }
       if (isSameCell(apple, newHead)) {
         createApple(prev);
+        setScore((prev) => prev + 1);
         return [newHead, ...prev];
       }
 
@@ -89,6 +109,15 @@ const Board: FC = () => {
     };
   }, [apple, gameEnd]);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const nextMove = getNextAutoMove(snake);
+      move(nextMove);
+    }, 500);
+
+    return () => clearInterval(intervalId);
+  }, [snake]);
+
   return (
     <div
       className="mx-auto grid w-fit"
@@ -101,15 +130,20 @@ const Board: FC = () => {
             className={clsx(
               "h-10 w-10 border-r border-b",
               {
-                "bg-gray-400": snake.some(
-                  (segment) => segment.x === x && segment.y === y,
-                ),
+                "bg-green-400":
+                  snake.some((segment) => segment.x === x && segment.y === y) &&
+                  !gameEnd,
               },
               {
-                "bg-rose-400": apple.x === x && apple.y === y,
+                "bg-red-400":
+                  snake.some((segment) => segment.x === x && segment.y === y) &&
+                  gameEnd,
+              },
+              {
+                "bg-gray-400": apple.x === x && apple.y === y,
               },
             )}
-          >{x}, {y}</div>
+          ></div>
         )),
       )}
     </div>
