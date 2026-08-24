@@ -1,10 +1,10 @@
 import type { FC } from "react";
-import Board from "./components/Board";
+import SnakeGame from "./components/SnakeGame";
 
 const SnakeGamePage: FC = () => {
   return (
     <div>
-      <Board />{" "}
+      <SnakeGame />
     </div>
   );
 };
