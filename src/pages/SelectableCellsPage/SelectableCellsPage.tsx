@@ -1,5 +1,8 @@
 import { useReducer, type FC } from "react";
 
+const GRID_ROWS = 12;
+const GRID_COLS = 12;
+
 type Point = {
   x: number;
   y: number;
@@ -50,13 +53,26 @@ const SelectableCellsPage: FC = () => {
       }
     >
       {drag.current && drag.start && drag.isDragging && (
-        <div className="border-dashed border absolute" style={{
-          left: Math.min(drag.start.x, drag.current.x),
-          top: Math.min(drag.start.y, drag.current.y),
-          height: Math.abs(drag.start.y-drag.current.y),
-          width: Math.abs(drag.start.x-drag.current.x)
-        }}/>
+        <div
+          className="absolute border border-dashed"
+          style={{
+            left: Math.min(drag.start.x, drag.current.x),
+            top: Math.min(drag.start.y, drag.current.y),
+            height: Math.abs(drag.start.y - drag.current.y),
+            width: Math.abs(drag.start.x - drag.current.x),
+          }}
+        />
       )}
+      <div className="grid h-full place-items-center">
+        <div
+          className="grid border-t border-l"
+          style={{ gridTemplateColumns: `repeat(${GRID_COLS}, 1fr)` }}
+        >
+          {Array.from({ length: GRID_COLS * GRID_ROWS }, () => (
+            <div className="h-10 w-10 border-r border-b" />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
