@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.7.1",
+    "@hookform/resolvers": "^5.9.0",
     "@tailwindcss/vite": "^4.3.3",
     "axios": "^1.19.0",
     "clsx": "^2.1.1",
