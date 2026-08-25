@@ -2,46 +2,41 @@ import type { FC } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import InputField from "./components/InputField";
-import TextareaField from "./components/TextareaField";
-import Button from "../../components/Button";
+import Field from "./components/Field";
 import useCreateMessage from "./hooks/useCreateMessage";
 
 const URL = "https://questions.greatfrontend.com/api/questions/contact-form";
 
-const schema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.email("Invalid Email"),
-  message: z.string().min(1, "Message is required"),
+const schama = z.object({
+  name: z.string().min(1, "Name is required."),
+  email: z.email("Email is invalid."),
+  message: z.string("Message is required."),
 });
 
-export type Schema = z.infer<typeof schema>;
+export type Schema = z.infer<typeof schama>;
 
 const ContactFormPage: FC = () => {
-  const methods = useForm({
-    resolver: zodResolver(schema),
-    defaultValues: { name: "", email: "", message: "" },
-  });
-
-  const { data, trigger, isMutating, error } = useCreateMessage(URL);
-
-  const onSubmit = (data: Schema) => trigger(data);
-
+  const methods = useForm({ resolver: zodResolver(schama) });
+  const { trigger, isMutating, data } = useCreateMessage(URL);
+  const onSubmit = (data: Schema) => {
+    trigger(data);
+  };
   return (
     <FormProvider {...methods}>
       <form
+        className="mx-auto grid w-100 grid-cols-[auto_1fr] gap-2"
         onSubmit={methods.handleSubmit(onSubmit)}
-        className="mx-auto flex w-120 flex-col justify-center gap-2"
       >
-        <InputField name="name" label="Name" />
-        <InputField name="email" label="Email" />
-        <TextareaField name="message" label="Message" />
-        <Button type="submit" className="w-fit" disabled={isMutating}>
-          {isMutating ? 'Sending... ' : 'Submit'}
-        </Button>
-        {isMutating && <span>Sending data...</span>}
-        {error && <span className="text-red-500">Something went wrong...</span>}
-        {data && <span className="text-green-700">{data}</span>}
+        <Field fieldType="input" name="name" label="Name: " />
+        <Field fieldType="input" name="email" label="Email: " />
+        <Field fieldType="textarea" name="message" label="Message: " />
+        <button
+          className="cursor-pointer rounded border border-gray-400 bg-gray-200 px-2 py-0.5"
+          disabled={isMutating}
+        >
+          Submit
+        </button>
+        {data && <span className="text-green-300 col-span-2">{data}</span>}
       </form>
     </FormProvider>
   );
