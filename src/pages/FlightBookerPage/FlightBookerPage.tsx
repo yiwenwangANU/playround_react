@@ -1,84 +1,79 @@
-import type { FC } from "react";
-import { useForm, FormProvider, useWatch } from "react-hook-form";
+import { useState, type FC } from "react";
+import { addDays, format } from "date-fns";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format, addDays } from "date-fns";
 import { z } from "zod";
-import FlightTypeField from "./components/FlightTypeField";
-import DatePickField from "./components/DatePickField/DatePickField";
+import Form from "./components/Form";
+import Dialog from "./components/Form/components/Dialog";
+
+const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
 
 const schema = z
   .object({
     flightType: z.enum(["oneWay", "roundTrip"]),
-    departure: z.iso.date(),
-    return: z.iso.date().optional(),
+    departureDate: z.iso.date(),
+    returnDate: z.iso.date().optional(),
   })
   .superRefine((data, ctx) => {
-    const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
-    if (tomorrow > data.departure) {
+    if (data.departureDate < tomorrow) {
       ctx.addIssue({
         code: "custom",
-        message: "Departure date must be after today",
-        path: ["departure"],
+        path: ["departureDate"],
+        message: "Departure date should late than today.",
       });
-      return;
     }
-    if (data.flightType === "roundTrip") {
-      if (!data.return) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Return date is required.",
-          path: ["return"],
-        });
-        return;
-      }
-      if (data.departure > data.return) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Return date must be after departure date",
-          path: ["return"],
-        });
-      }
+    if (data.flightType === "roundTrip" && !data.returnDate) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["returnDate"],
+        message: "Return date is required.",
+      });
+    }
+    if (
+      data.flightType === "roundTrip" &&
+      data.returnDate &&
+      data.departureDate >= data.returnDate
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["returnDate"],
+        message: "Return date should late than departure date.",
+      });
     }
   });
 
 export type Schema = z.infer<typeof schema>;
 
 const FlightBookerPage: FC = () => {
-  const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [flight, setFlight] = useState<Schema>({
+    flightType: "oneWay",
+    departureDate: tomorrow,
+  });
   const methods = useForm({
     shouldUnregister: true,
     resolver: zodResolver(schema),
     defaultValues: {
       flightType: "oneWay",
-      departure: tomorrow,
-      return: tomorrow,
+      departureDate: tomorrow,
     },
   });
 
-  const flightType = useWatch({ name: "flightType", control: methods.control });
-  const departure = useWatch({ name: "departure", control: methods.control });
-
-  const onSubmit = (data: Schema) => console.log(data);
+  const onSubmit = (data: Schema) => {
+    setFlight(data);
+    setDialogOpen(true);
+  };
 
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(onSubmit)}
-        className="mx-auto flex w-100 flex-col gap-2"
-        noValidate
-      >
-        <FlightTypeField />
-        <DatePickField name="departure" min={tomorrow} />
-        {flightType === "roundTrip" && (
-          <DatePickField name="return" min={departure} />
-        )}
-        <button
-          type="submit"
-          className="w-fit rounded border border-gray-400 bg-gray-200 px-1.5 py-0.5 hover:cursor-pointer"
-        >
-          Submit
-        </button>
-      </form>
+      <div className="mx-auto w-fit">
+        <Form onSubmit={methods.handleSubmit(onSubmit)} />
+        <Dialog
+          onClose={() => setDialogOpen(false)}
+          isOpen={dialogOpen}
+          flight={flight}
+        />
+      </div>
     </FormProvider>
   );
 };
