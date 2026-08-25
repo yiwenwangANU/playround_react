@@ -3,26 +3,18 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Form from "./components/Form";
-import getMonthlyPayment from "./utils/getMonthlyPayment";
-import Report from "./components/Report";
+import Calculator from "./components/Calculator";
 
 const schema = z.object({
-  loanAmount: z.number("Invalid Loan Amount").min(0, "Invalid Loan Amount"),
-  loanTerm: z.int("Invalid Loan Term").min(0, "Invalid Loan Term"),
-  interestRate: z
-    .number("Invalid Interest Rate")
-    .min(0, "Invalid Interest Rate"),
+  loanAmount: z.number().min(0, "Please enter a positive number."),
+  loanTerm: z.number().int().min(0, "Please enter a positive integer."),
+  interestRate: z.number().min(0, "Please enter a positive number."),
 });
 
 export type Schema = z.infer<typeof schema>;
 
-type PaymentData = {
-  monthlyPayment: number;
-  loanAmount: number;
-  loanTerm: number;
-};
-
 const MortgageCalculatorPage: FC = () => {
+  const [loan, setLoan] = useState<Schema | null>(null);
   const methods = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -32,32 +24,15 @@ const MortgageCalculatorPage: FC = () => {
     },
   });
 
-  const [paymentData, setPaymentData] = useState<PaymentData | null>(null);
-
   const onSubmit = (data: Schema) => {
-    const payment = getMonthlyPayment(
-      data.loanAmount,
-      data.loanTerm,
-      data.interestRate,
-    );
-    setPaymentData({
-      loanAmount: data.loanAmount,
-      monthlyPayment: payment,
-      loanTerm: data.loanTerm,
-    });
+    setLoan(data);
   };
 
   return (
     <FormProvider {...methods}>
-      <div className="mx-auto w-120 space-y-4">
+      <div className="mx-auto w-fit space-y-2">
         <Form onSubmit={methods.handleSubmit(onSubmit)} />
-        {paymentData && (
-          <Report
-            monthlyPaymentAmount={paymentData.monthlyPayment}
-            loanAmount={paymentData.loanAmount}
-            loanTerm={paymentData.loanTerm}
-          />
-        )}
+        <Calculator loan={loan} />
       </div>
     </FormProvider>
   );
