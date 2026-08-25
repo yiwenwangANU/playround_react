@@ -1,23 +1,19 @@
 import { useEffect, useState, type FC } from "react";
-import { clsx } from "clsx";
 
-interface Props {
-  delay?: number;
-}
-
-const ProgressBar: FC<Props> = ({ delay = 2000 }) => {
-  const [active, setActive] = useState<boolean>(false);
-  useEffect(() => setActive(true), []);
+const ProgressBar: FC = () => {
+  const [started, setStarted] = useState<boolean>(false);
+  useEffect(() => {
+    setStarted(true);
+  }, []);
 
   return (
-    <div className="h-2 w-full bg-gray-200 my-1">
+    <div
+      className="my-2 h-3 w-full rounded-full bg-gray-400"
+      role="progressbar"
+    >
       <div
-        className={clsx(
-          "h-2 bg-green-700",
-          { "w-0": !active },
-          { "w-full": active },
-        )}
-        style={{ transitionDuration: `${delay}ms` }}
+        className="h-3 rounded-full bg-green-900 transition-[width] duration-2000"
+        style={{ width: started ? "100%" : "0%" }}
       />
     </div>
   );

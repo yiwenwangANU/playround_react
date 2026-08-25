@@ -1,17 +1,16 @@
 import { useState, type FC } from "react";
 import ProgressBar from "./components/ProgressBar";
 
-const ProgressBarPage: FC = () => {
-  const [num, setNum] = useState<number>(0);
-
+const ProgesssBarPage: FC = () => {
+  const [numOfBar, setNumOfBar] = useState<number>(0);
   return (
     <>
-      {Array.from({ length: num }, () => (
-        <ProgressBar />
+      {Array.from({ length: numOfBar }, (_, i) => (
+        <ProgressBar key={i} />
       ))}
-      <button onClick={() => setNum((prev) => prev + 1)}>Add</button>
+      <button onClick={() => setNumOfBar((prev) => prev + 1)}>Add</button>
     </>
   );
 };
 
-export default ProgressBarPage;
+export default ProgesssBarPage;
