@@ -1,8 +1,8 @@
 import { useEffect, useReducer, useRef, useState, type FC } from "react";
 import clsx from "clsx";
 
-const GRID_ROWS = 12;
-const GRID_COLS = 12;
+const ROWS = 12;
+const COLS = 12;
 
 type Point = {
   x: number;
@@ -10,114 +10,122 @@ type Point = {
 };
 
 type Drag = {
-  start: Point | null;
-  current: Point | null;
+  startPoint: Point | null;
+  currentPoint: Point | null;
   isDragging: boolean;
 };
 
 type Action =
   | { type: "pointerdown"; point: Point }
   | { type: "pointermove"; point: Point }
-  | { type: "pointerup"; point: Point };
+  | { type: "pointerup" };
 
-const reducer = (drag: Drag, action: Action) => {
+const reducer = (state: Drag, action: Action) => {
   switch (action.type) {
     case "pointerdown":
-      return { start: action.point, current: action.point, isDragging: true };
+      return {
+        startPoint: action.point,
+        currentPoint: action.point,
+        isDragging: true,
+      };
     case "pointermove":
-      return { ...drag, current: action.point };
+      if (state.isDragging) return { ...state, currentPoint: action.point };
+      else return state;
     case "pointerup":
-      return { ...drag, current: action.point, isDragging: false };
+      return { ...state, isDragging: false };
     default:
-      return drag;
+      return state;
   }
 };
 
 const getSelectedCells = (
-  start: Point,
-  current: Point,
+  startPoint: Point | null,
+  currentPoint: Point | null,
   cells: (HTMLDivElement | null)[],
-): number[] => {
-  const left = Math.min(start.x, current.x);
-  const right = Math.max(start.x, current.x);
-  const top = Math.min(start.y, current.y);
-  const bottom = Math.max(start.y, current.y);
+) => {
+  if (!startPoint || !currentPoint) return [];
+  const selectedIndex = cells.reduce<number[]>((selected, currentCell, i) => {
+    if (!currentCell) return selected;
+    const rect = currentCell.getBoundingClientRect();
+    const left = Math.min(startPoint.x, currentPoint.x);
+    const right = Math.max(startPoint.x, currentPoint.x);
+    const top = Math.min(startPoint.y, currentPoint.y);
+    const bottom = Math.max(startPoint.y, currentPoint.y);
 
-  const selected = cells.reduce<number[]>((selectedIndex, cell, i) => {
-    if (!cell) return [];
-    const rect = cell.getBoundingClientRect();
     if (
       bottom >= rect.top &&
       top <= rect.bottom &&
       right >= rect.left &&
       left <= rect.right
-    )
-      return [...selectedIndex, i];
-    return selectedIndex;
+    ) {
+      return [...selected, i];
+    }
+    return selected;
   }, []);
-
-  return selected;
+  return selectedIndex;
 };
 
 const SelectableCellsPage: FC = () => {
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
   const cellsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [drag, dispatch] = useReducer(reducer, {
-    start: null,
-    current: null,
+    startPoint: null,
+    currentPoint: null,
     isDragging: false,
   });
 
   useEffect(() => {
-    if (!drag.start || !drag.current || !drag.isDragging) return;
-    const cells = getSelectedCells(drag.start, drag.current, cellsRef.current);
-    setSelectedCells(cells);
-  }, [drag.current, drag.isDragging, drag.start]);
+    setSelectedCells(() =>
+      getSelectedCells(drag.startPoint, drag.currentPoint, cellsRef.current),
+    );
+  }, [drag.startPoint, drag.currentPoint, drag.isDragging]);
+
   return (
     <div
-      className="fixed inset-0"
-      onPointerDown={(e) => {
-        setSelectedCells([]);
+      className="fixed inset-0 grid h-dvh w-dvw place-items-center"
+      onPointerDown={(e) =>
         dispatch({
           type: "pointerdown",
           point: { x: e.clientX, y: e.clientY },
-        });
-      }}
-      onPointerMove={(e) =>
-        dispatch({ type: "pointermove", point: { x: e.clientX, y: e.clientY } })
+        })
       }
-      onPointerUp={(e) =>
-        dispatch({ type: "pointerup", point: { x: e.clientX, y: e.clientY } })
+      onPointerMove={(e) =>
+        dispatch({
+          type: "pointermove",
+          point: { x: e.clientX, y: e.clientY },
+        })
+      }
+      onMouseUp={() =>
+        dispatch({
+          type: "pointerup",
+        })
       }
     >
-      {drag.current && drag.start && drag.isDragging && (
+      {drag.isDragging && drag.startPoint && drag.currentPoint && (
         <div
-          className="absolute border border-dashed"
+          className="fixed border border-dashed"
           style={{
-            left: Math.min(drag.start.x, drag.current.x),
-            top: Math.min(drag.start.y, drag.current.y),
-            height: Math.abs(drag.start.y - drag.current.y),
-            width: Math.abs(drag.start.x - drag.current.x),
+            left: Math.min(drag.startPoint.x, drag.currentPoint.x),
+            top: Math.min(drag.startPoint.y, drag.currentPoint.y),
+            width: Math.abs(drag.startPoint.x - drag.currentPoint.x),
+            height: Math.abs(drag.startPoint.y - drag.currentPoint.y),
           }}
         />
       )}
-      <div className="grid h-full place-items-center">
-        <div
-          className="grid border-t border-l"
-          style={{ gridTemplateColumns: `repeat(${GRID_COLS}, 1fr)` }}
-        >
-          {Array.from({ length: GRID_COLS * GRID_ROWS }, (_, i) => (
-            <div
-              className={clsx("h-10 w-10 border-r border-b", {
-                "bg-sky-100": selectedCells.includes(i),
-              })}
-              key={i}
-              ref={(cell) => {
-                cellsRef.current[i] = cell;
-              }}
-            />
-          ))}
-        </div>
+      <div
+        className="grid w-fit border-t border-l"
+        style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)` }}
+      >
+        {Array.from({ length: ROWS * COLS }, (_, i) => (
+          <div
+            className={clsx("h-10 w-10 border-r border-b", {
+              "bg-sky-100": selectedCells.includes(i),
+            })}
+            ref={(cell) => {
+              cellsRef.current[i] = cell;
+            }}
+          />
+        ))}
       </div>
     </div>
   );
