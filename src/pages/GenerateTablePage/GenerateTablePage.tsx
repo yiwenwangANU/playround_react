@@ -1,46 +1,44 @@
 import { useState, type FC } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { FormProvider, useForm } from "react-hook-form";
-import Form from "./components/Form/Form";
+import Form from "./components/Form";
 import Table from "./components/Table";
 
+const positiveNumber = z
+  .number("Please provide a positive number.")
+  .int("Please provide a positive number.")
+  .min(1, "Please provide a positive number.");
+
 const schema = z.object({
-  rows: z
-    .int("Rows needs to be positive integer.")
-    .min(1, "Rows needs to be positive integer."),
-  cols: z
-    .int("Columns needs to be positive integer.")
-    .min(1, "Columns needs to be positive integer."),
+  rows: positiveNumber,
+  cols: positiveNumber,
 });
 
 export type Schema = z.infer<typeof schema>;
 
+type Table = {
+  rows: number;
+  cols: number;
+};
+
 const GenerateTablePage: FC = () => {
-  const methods = useForm({
-    resolver: zodResolver(schema),
-  });
+  const [table, setTable] = useState<Table | null>(null);
+  const methods = useForm({ resolver: zodResolver(schema) });
 
-  type TableInputs = {
-    rows: number;
-    cols: number;
-  };
-  const [tableInputs, setTableInputs] = useState<TableInputs | null>(null);
-
-  const onSubmit = ({ rows, cols }: Schema) => {
-    setTableInputs({
-      rows,
-      cols,
+  const onSubmit = (data: Schema) => {
+    setTable({
+      rows: data.rows,
+      cols: data.cols,
     });
   };
-
   return (
-    <div className="mx-auto w-fit">
-      <FormProvider {...methods}>
+    <FormProvider {...methods}>
+      <div className="mx-auto w-fit space-y-5 text-center">
         <Form onSubmit={methods.handleSubmit(onSubmit)} />
-      </FormProvider>
-      {tableInputs && <Table rows={tableInputs.rows} cols={tableInputs.cols} />}
-    </div>
+        {table && <Table rows={table.rows} cols={table.cols} />}
+      </div>
+    </FormProvider>
   );
 };
 

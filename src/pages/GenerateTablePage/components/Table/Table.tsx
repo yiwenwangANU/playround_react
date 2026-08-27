@@ -4,21 +4,22 @@ interface Props {
   rows: number;
   cols: number;
 }
-
-const Table: FC<Props> = ({ rows, cols }) => (
-  <div
-    className="mx-auto my-2 grid w-fit grid-flow-col border-t border-l"
-    style={{
-      gridTemplateRows: `repeat(${rows}, 2.5rem)`,
-      gridTemplateColumns: `repeat(${cols}, 2.5rem)`,
-    }}
-  >
-    {Array.from({ length: rows * cols }, (_, i) => (
-      <div className="flex items-center justify-center border-r border-b border-black">
-        {i + 1}
-      </div>
-    ))}
-  </div>
-);
+const Table: FC<Props> = ({ rows, cols }) => {
+  return (
+    <table className="border-t border-l">
+      <tbody>
+        {Array.from({ length: rows }, (_, i) => (
+          <tr>
+            {Array.from({ length: cols }, (_, j) => (
+              <td className="h-10 w-10 border-r border-b">
+                {j % 2 === 0 ? i + j * rows : cols - i - 1 + j * rows}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
 export default Table;

@@ -1,11 +1,12 @@
 import type { FC } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import type { Schema } from "../../../GenerateTablePage";
+import type { Schema } from "../../../../GenerateTablePage";
 
 interface Props {
   name: "rows" | "cols";
   label: string;
 }
+
 const Field: FC<Props> = ({ name, label }) => {
   const {
     control,
@@ -15,16 +16,18 @@ const Field: FC<Props> = ({ name, label }) => {
 
   return (
     <>
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={name} className="text-left">
+        {label}
+      </label>
       <input
-        {...field}
-        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+        className="border border-black px-1 py-0.5"
         id={name}
+        {...field}
         type="number"
-        className="border border-gray-800 px-1 py-0.5"
+        onChange={(e) => field.onChange(e.target.valueAsNumber)}
       />
       {errors[name] && (
-        <span className="col-span-2 text-red-500">{errors[name].message}</span>
+        <span className="col-span-2 text-rose-500">{errors[name].message}</span>
       )}
     </>
   );
