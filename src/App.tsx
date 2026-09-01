@@ -1,9 +1,18 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
-import SnakeGamePage from "./pages/SnakeGamePage";
+
+const SnakeGamePage = lazy(() => import("./pages/SnakeGamePage"));
 
 const App = () => (
   <Routes>
-    <Route index element={<SnakeGamePage />} />
+    <Route
+      index
+      element={
+        <Suspense fallback={<div>SnakeGamePage</div>}>
+          <SnakeGamePage />
+        </Suspense>
+      }
+    />
   </Routes>
 );
 
