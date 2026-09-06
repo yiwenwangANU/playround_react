@@ -1,9 +1,17 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router";
-import TodoListPage from "./pages/TodoListPage/TodoListPage";
+const TodoListPage = lazy(() => import("./pages/TodoListPage"));
 
 const App = () => (
   <Routes>
-    <Route index element={<TodoListPage />} />
+    <Route
+      path="/18"
+      element={
+        <Suspense fallback={<div>TodoList Page Loading</div>}>
+          <TodoListPage />
+        </Suspense>
+      }
+    />
   </Routes>
 );
 
