@@ -16,8 +16,6 @@ export const TodoListContext = createContext<TodoListContextType | null>(null);
 
 export const useTodoList = () => {
   const context = useContext(TodoListContext);
-  if (!context) {
-    throw new Error("toDoListContext used outside provider!");
-  }
+  if (!context) throw new Error("lol");
   return context;
 };

@@ -1,35 +1,35 @@
-import { create } from "zustand";
 import { v4 as uuid } from "uuid";
+import { create } from "zustand";
 
 type Todo = {
   id: string;
   content: string;
 };
 
-type todoListStore = {
+type TodoListStore = {
   todoList: Todo[];
 };
 
-export const todoListStore = create<todoListStore>(() => ({
+export const todoListStore = create<TodoListStore>(() => ({
   todoList: [],
 }));
 
 export const addTodo = (content: string) => {
-  todoListStore.setState((state) => ({
-    todoList: [...state.todoList, { id: uuid(), content }],
+  todoListStore.setState((prev) => ({
+    todoList: [...prev.todoList, { id: uuid(), content }],
   }));
 };
 
 export const editTodo = (id: string, content: string) => {
-  todoListStore.setState((state) => ({
-    todoList: state.todoList.map((todo) =>
+  todoListStore.setState((prev) => ({
+    todoList: prev.todoList.map((todo) =>
       todo.id === id ? { ...todo, content } : todo,
     ),
   }));
 };
 
 export const deleteTodo = (id: string) => {
-  todoListStore.setState((state) => ({
-    todoList: state.todoList.filter((todo) => todo.id !== id),
+  todoListStore.setState((prev) => ({
+    todoList: prev.todoList.filter((todo) => todo.id !== id),
   }));
 };
