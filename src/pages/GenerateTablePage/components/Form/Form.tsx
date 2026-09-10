@@ -8,14 +8,22 @@ import {
 import Field from "./components/Field";
 import Button from "@/components/Button";
 
-const Form: FC = () => {
+interface Props {
+  onSubmit: (data: Schema) => void;
+}
+
+const Form: FC<Props> = ({ onSubmit }) => {
   const methods = useForm({ resolver: zodResolver(schema) });
-  const onSubmit = (data: Schema) => {
-    console.log(data);
+  const handleOnSubmit = (data: Schema) => {
+    onSubmit(data);
   };
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)} className="grid grid-cols-[auto_1fr] gap-2 w-80">
+      <form
+        onSubmit={methods.handleSubmit(handleOnSubmit)}
+        className="grid w-80 grid-cols-[auto_1fr] gap-2"
+      >
         <Field name="rows" label="rows" />
         <Field name="cols" label="columns" />
         <Button>Submit</Button>
