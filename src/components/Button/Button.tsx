@@ -9,9 +9,6 @@ const button = tv({
       secondary: "bg-zinc-100 text-zinc-900",
       tertiary: "text-zinc-600",
     },
-    flat: {
-      true: "bg-transparent shadow-none",
-    },
   },
   defaultVariants: {
     variant: "primary",
@@ -26,8 +23,10 @@ interface Props
   className?: string;
 }
 
-const Button: FC<Props> = ({ children, className, ...rest }) => (
-  <button className={button({ ...rest, className })}>{children}</button>
+const Button: FC<Props> = ({ children, className, variant, ...rest }) => (
+  <button {...rest} className={button({ variant, className })}>
+    {children}
+  </button>
 );
 
 export default Button;
