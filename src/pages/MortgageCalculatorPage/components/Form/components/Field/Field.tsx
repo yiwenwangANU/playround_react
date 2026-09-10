@@ -1,11 +1,13 @@
 import type { FC } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import type { Schema } from "../../../../MortgageCalculatorPage";
+import type { Schema } from "../../Form";
+import Input from "@/components/Input";
 
 interface Props {
   name: "loanAmount" | "loanTerm" | "interestRate";
   label: string;
 }
+
 const Field: FC<Props> = ({ name, label }) => {
   const {
     control,
@@ -15,9 +17,16 @@ const Field: FC<Props> = ({ name, label }) => {
 
   return (
     <>
-      <label>{label}</label>
-      <input {...field} className="border border-black px-1 py-0.5" />
-      {errors[name] && <span className="col-span-2 text-rose-500"></span>}
+      <label htmlFor={name}>{label}:</label>
+      <Input
+        id={name}
+        {...field}
+        type="number"
+        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+      />
+      {errors[name] && (
+        <div className="col-span-2 text-rose-500">{errors[name].message}</div>
+      )}
     </>
   );
 };

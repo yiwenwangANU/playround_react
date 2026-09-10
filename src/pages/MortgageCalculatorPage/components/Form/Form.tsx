@@ -1,19 +1,41 @@
 import type { FC } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { FormProvider, useForm } from "react-hook-form";
 import Field from "./components/Field";
 
-interface Props {
-  onSubmit: () => void;
-}
-const Form: FC<Props> = ({ onSubmit }) => {
+const schema = z.object({
+  loanAmount: z.number().int().min(0, "Loan Amount must no less than 0."),
+  loanTerm: z.number().int().min(0, "Loan Term must no less than 0."),
+  interestRate: z.number().int().min(0, "Loan Term must no less than 0."),
+});
+
+export type Schema = z.infer<typeof schema>;
+
+interface Props {}
+
+const Form: FC<Props> = () => {
+  const methods = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      loanAmount: 100000,
+      loanTerm: 30,
+      interestRate: 3,
+    },
+  });
+
+  const onSubmit = (data: Schema) => {
+    console.log(data);
+  };
+
   return (
-    <form onSubmit={onSubmit} className="grid w-100 grid-cols-[auto_1fr] gap-2">
-      <Field name="loanAmount" label="Loan Amount: " />
-      <Field name="loanTerm" label="Loan Term: " />
-      <Field name="interestRate" label="Interest Rate: " />
-      <button className="w-fit cursor-pointer rounded border border-gray-400 bg-gray-200 px-2 py-0.5">
-        Calculate
-      </button>
-    </form>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <Field name="loanAmount" label="Loan Amount" />
+        <Field name="loanTerm" label="Loan Term" />
+        <Field name="interestRate" label="Interest Rate" />
+      </form>
+    </FormProvider>
   );
 };
 

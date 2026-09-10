@@ -1,1 +1,1 @@
-export { default } from "./MortgageCalculatorPage";
+export { default, type Schema } from "./MortgageCalculatorPage";
