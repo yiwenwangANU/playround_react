@@ -1,20 +1,15 @@
 import type { FC } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { FormProvider, useForm } from "react-hook-form";
 import Field from "./components/Field";
+import Button from "@/components/Button";
+import { schema, type Schema } from "@/pages/MortgageCalculatorPage/loanSchema";
 
-const schema = z.object({
-  loanAmount: z.number().int().min(0, "Loan Amount must no less than 0."),
-  loanTerm: z.number().int().min(0, "Loan Term must no less than 0."),
-  interestRate: z.number().int().min(0, "Loan Term must no less than 0."),
-});
+interface Props {
+  onSubmit: (data: Schema) => void;
+}
 
-export type Schema = z.infer<typeof schema>;
-
-interface Props {}
-
-const Form: FC<Props> = () => {
+const Form: FC<Props> = ({ onSubmit }) => {
   const methods = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -24,16 +19,20 @@ const Form: FC<Props> = () => {
     },
   });
 
-  const onSubmit = (data: Schema) => {
-    console.log(data);
+  const handleOnSubmit = (data: Schema) => {
+    onSubmit(data);
   };
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
+      <form
+        onSubmit={methods.handleSubmit(handleOnSubmit)}
+        className="grid grid-cols-[auto_1fr] gap-2"
+      >
         <Field name="loanAmount" label="Loan Amount" />
         <Field name="loanTerm" label="Loan Term" />
         <Field name="interestRate" label="Interest Rate" />
+        <Button type="submit">Calculate</Button>
       </form>
     </FormProvider>
   );

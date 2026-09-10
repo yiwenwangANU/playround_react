@@ -23,7 +23,7 @@ interface Props
     Omit<ComponentProps<"button">, "children" | "className">,
     VariantProps<typeof button> {
   children: ReactNode;
-  className: string;
+  className?: string;
 }
 
 const Button: FC<Props> = ({ children, className, ...rest }) => (

@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import type { Schema } from "../../Form";
 import Input from "@/components/Input";
+import type { Schema } from "@/pages/MortgageCalculatorPage/loanSchema";
 
 interface Props {
   name: "loanAmount" | "loanTerm" | "interestRate";

@@ -2,7 +2,7 @@ import type { ComponentProps, FC } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface Props extends Omit<ComponentProps<"input">, "className"> {
-  className: string;
+  className?: string;
 }
 
 const Input: FC<Props> = ({ className, ...rest }) => (
