@@ -3,7 +3,7 @@ import ProgressBarPage from "./pages/ProgressBarPage";
 
 const App = () => (
   <Routes>
-    <Route index element={<ProgressBarPage />} />
+    <Route path="/8" element={<ProgressBarPage />} />
   </Routes>
 );
 
