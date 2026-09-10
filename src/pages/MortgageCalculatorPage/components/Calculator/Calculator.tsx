@@ -1,13 +1,13 @@
 import type { FC } from "react";
 import type { Schema } from "../../loanSchema";
-import useLoan from "./hooks/useLoan";
+import calculateLoan from "./utils/calculateLoan";
 
 interface Props {
   loan: Schema | null;
 }
 
 const Calculator: FC<Props> = ({ loan }) => {
-  const { monthlyAmount, totalAmount, totalInterest } = useLoan(loan);
+  const { monthlyAmount, totalAmount, totalInterest } = calculateLoan(loan);
 
   return (
     <div className="mt-2 space-y-2">

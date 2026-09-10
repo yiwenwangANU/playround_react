@@ -6,7 +6,7 @@ type Result = {
   totalInterest: string;
 };
 
-const useLoan = (loan: Schema | null): Result => {
+const calculateLoan = (loan: Schema | null): Result => {
   if (!loan) return { monthlyAmount: "", totalAmount: "", totalInterest: "" };
   const { loanAmount, loanTerm, interestRate } = loan;
   const monthlyInterestRate = interestRate / 100 / 12;
@@ -34,4 +34,4 @@ const useLoan = (loan: Schema | null): Result => {
   };
 };
 
-export default useLoan;
+export default calculateLoan;
