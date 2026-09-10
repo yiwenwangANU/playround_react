@@ -1,14 +1,14 @@
 import type { FC } from "react";
-import ProgressBar from "./components/ProgressBar/ProgressBar";
+import ProgressBar from "./components/ProgressBar";
+
+const PROGRESS = [0, 1, 10, 25, 50, 75, 101];
 
 const ProgressBarPage: FC = () => {
   return (
     <div className="space-y-2">
-      <ProgressBar progress={0} />
-      <ProgressBar progress={25} />
-      <ProgressBar progress={50} />
-      <ProgressBar progress={75} />
-      <ProgressBar progress={100} />
+      {PROGRESS.map((progress, i) => (
+        <ProgressBar progress={progress} key={i} />
+      ))}
     </div>
   );
 };

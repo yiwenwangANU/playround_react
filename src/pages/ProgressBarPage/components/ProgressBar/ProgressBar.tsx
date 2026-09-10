@@ -4,17 +4,18 @@ interface Props {
   progress: number;
 }
 
-const ProgressBar: FC<Props> = ({ progress }) => (
-  <div className="h-5 w-full rounded-full border border-gray-400 bg-gray-100">
-    {progress > 0 && (
+const ProgressBar: FC<Props> = ({ progress }) => {
+  const refinedProgress = Math.max(Math.min(progress, 100), 0);
+  return (
+    <div className="mx-10 h-4 overflow-hidden rounded-3xl border border-gray-400 bg-gray-200">
       <div
-        className="h-5 rounded-full border border-blue-600 bg-blue-600 text-white text-sm text-center"
-        style={{ width: `${progress}%` }}
+        className="flex h-4 items-center justify-center overflow-clip bg-blue-500 text-sm text-white"
+        style={{ width: `${refinedProgress}%` }}
       >
-        {progress}%
+        {refinedProgress}%
       </div>
-    )}
-  </div>
-);
+    </div>
+  );
+};
 
 export default ProgressBar;
