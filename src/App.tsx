@@ -3,7 +3,7 @@ import FlightBookerPage from "./pages/FlightBookerPage";
 
 const App = () => (
   <Routes>
-    <Route index element={<FlightBookerPage />} />
+    <Route path="/6" element={<FlightBookerPage />} />
   </Routes>
 );
 
