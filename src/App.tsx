@@ -3,7 +3,7 @@ import TemperatureConverterPage from "./pages/TemperatureConverterPage";
 
 const App = () => (
   <Routes>
-    <Route index element={<TemperatureConverterPage />} />
+    <Route path="/9" element={<TemperatureConverterPage />} />
   </Routes>
 );
 
