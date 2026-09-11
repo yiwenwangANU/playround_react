@@ -5,7 +5,6 @@ const DATA = [
   {
     user: {
       name: "John Doe",
-
       thumbNail: "https://xsgames.co/randomusers/assets/avatars/male/8.jpg",
     },
     content:
@@ -18,7 +17,6 @@ const DATA = [
   {
     user: {
       name: "Jane Doe",
-
       thumbNail: "https://xsgames.co/randomusers/assets/avatars/female/67.jpg",
     },
     content:
@@ -31,7 +29,6 @@ const DATA = [
   {
     user: {
       name: "WALL-E",
-
       thumbNail: "https://xsgames.co/randomusers/assets/avatars/pixel/14.jpg",
     },
     content: "The best way to predict the future is to invent it.",
@@ -46,11 +43,11 @@ const TweetPage: FC = () =>
   DATA.map((tweet, i) => (
     <Tweet
       key={i}
+      metaData={tweet.metaData}
       user={tweet.user}
+      content={tweet.content}
       message={tweet.message}
       like={tweet.like}
-      metadata={tweet.metaData}
-      content={tweet.content}
       repeat={tweet.repeat}
     />
   ));

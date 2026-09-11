@@ -3,7 +3,7 @@ import TweetPage from "./pages/TweetPage";
 
 const App = () => (
   <Routes>
-    <Route index element={<TweetPage />} />
+    <Route path="/10" element={<TweetPage />} />
   </Routes>
 );
 
