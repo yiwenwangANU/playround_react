@@ -3,7 +3,7 @@ import TabsPage from "./pages/TabsPage";
 
 const App = () => (
   <Routes>
-    <Route index element={<TabsPage />} />
+    <Route path="/11" element={<TabsPage />} />
   </Routes>
 );
 
