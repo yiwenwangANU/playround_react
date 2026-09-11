@@ -1,5 +1,6 @@
+import Button from "@/components/Button";
 import { useState, type FC } from "react";
-import Button from "../../components/Button";
+import clsx from "clsx";
 
 const DATA = [
   {
@@ -21,21 +22,20 @@ const TabsPage: FC = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
 
   return (
-    <div className="mx-auto w-100">
-      <div className="flex items-center justify-center gap-2" role="tablist">
-        {DATA.map(({ title }, i) => (
+    <div className="mx-auto w-120 space-y-2">
+      <div className="flex gap-2">
+        {DATA.map((tab, i) => (
           <Button
-            key={i}
             onClick={() => setActiveTab(i)}
-            variant={i === activeTab ? "secondary" : "primary"}
-            aria-selected={i === activeTab}
-            role="tab"
+            className={clsx({
+              "bg-violet-500 text-white hover:text-white": i == activeTab,
+            })}
           >
-            {title}
+            {tab.title}
           </Button>
         ))}
       </div>
-      <div aria-label="tab-content">{DATA[activeTab].content}</div>
+      <div>{DATA[activeTab].content}</div>
     </div>
   );
 };
