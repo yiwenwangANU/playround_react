@@ -19,7 +19,8 @@ const schema = z.object({
         title: z.string(),
       }),
     }),
-  )
+  ),
+  total: z.number(),
 });
 
 const fetcher = createFetcher(schema, import.meta.env.VITE_USER_BASE_URL);
@@ -30,12 +31,14 @@ const useUsers = (query: Query) => {
     queryFn: () => fetcher(`?${queryString.stringify(query)}`),
   });
 
-  return data.users.map((user) => ({
+  const users = data.users.map((user) => ({
     id: user.id,
     name: `${user.firstName} ${user.lastName}`,
     age: user.age,
     occupation: user.company.title,
   }));
+
+  return { users, total: data.total };
 };
 
 export default useUsers;
