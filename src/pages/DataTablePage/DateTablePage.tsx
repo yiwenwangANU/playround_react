@@ -1,9 +1,11 @@
-import { useState, type FC } from "react";
+import { type FC } from "react";
 import useUsers from "@/services/useUsers";
+import { useSearchParams } from "react-router";
 
 const DataTablePage: FC = () => {
-  const [skip, setSkip] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
+  const [searchParams, setSearchParams] = useSearchParams()
+  const skip = Number(searchParams.get('skip')?? 0) 
+  const limit = Number(searchParams.get('limit') ?? 5)
   const { users, total } = useUsers({ skip, limit });
 
   return (
@@ -32,8 +34,12 @@ const DataTablePage: FC = () => {
       <div className="flex items-center gap-2">
         <select
           onChange={(e) => {
-            setSkip(0);
-            setLimit(Number(e.target.value));
+            setSearchParams(prev => {
+              const params = new URLSearchParams(prev);
+              params.set('skip', '0')
+              params.set('limit', e.target.value)
+              return params
+            })
           }}
           className="cursor-pointer rounded border border-gray-400 bg-gray-200 px-2 py-0.5"
         >
@@ -44,7 +50,11 @@ const DataTablePage: FC = () => {
         <button
           className="cursor-pointer rounded border border-gray-400 bg-gray-200 px-2 py-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           onClick={() => {
-            setSkip((prev) => prev - limit);
+            setSearchParams(prev => {
+              const params = new URLSearchParams(prev)
+              params.set('skip', String(Math.max(0, skip-limit)))
+              return params
+            })
           }}
           disabled={skip - limit < 0}
         >
@@ -56,7 +66,11 @@ const DataTablePage: FC = () => {
         <button
           className="cursor-pointer rounded border border-gray-400 bg-gray-200 px-2 py-0.5 disabled:cursor-not-allowed disabled:opacity-50"
           onClick={() => {
-            setSkip((prev) => prev + limit);
+            setSearchParams(prev=>{
+              const params = new URLSearchParams(prev)
+              params.set('skip', String(Math.min(total, skip+limit)))
+              return params
+            })
           }}
           disabled={skip + limit >= total}
         >
