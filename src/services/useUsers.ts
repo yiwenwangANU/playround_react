@@ -25,11 +25,14 @@ const schema = z.object({
 
 const fetcher = createFetcher(schema, import.meta.env.VITE_USER_BASE_URL);
 
+const userQuery = (query: Query) => ({
+  queryKey: ["users", query],
+  queryFn: () => fetcher(`?${queryString.stringify(query)}`),
+  staleTime: 30_000,
+});
+
 const useUsers = (query: Query) => {
-  const { data } = useSuspenseQuery({
-    queryKey: ["users", query],
-    queryFn: () => fetcher(`?${queryString.stringify(query)}`),
-  });
+  const { data } = useSuspenseQuery(userQuery(query));
 
   const users = data.users.map((user) => ({
     id: user.id,
@@ -41,4 +44,4 @@ const useUsers = (query: Query) => {
   return { users, total: data.total };
 };
 
-export default useUsers;
+export { useUsers, userQuery };

@@ -1,35 +1,27 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router";
-import { ErrorBoundary, getErrorMessage } from "react-error-boundary";
-import { QueryErrorResetBoundary } from "@tanstack/react-query";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
+import DataTableErrorBoundary from "./pages/DataTablePage/DataTableErrorBoundary";
+import { QueryClient } from "@tanstack/react-query";
+import DataTableLoader from "./pages/DataTablePage/DataTableLoader";
+
 const DataTablePage = lazy(() => import("./pages/DataTablePage"));
 
-const App = () => (
-  <Routes>
-    <Route
-      path="/12"
-      element={
-        <QueryErrorResetBoundary>
-          {({ reset }) => (
-            <ErrorBoundary
-              fallbackRender={({ error, resetErrorBoundary }) => (
-                <div role="alert">
-                  <p>Something went wrong:</p>
-                  <pre>{getErrorMessage(error)}</pre>
-                  <button onClick={resetErrorBoundary}>Try again</button>
-                </div>
-              )}
-              onReset={reset}
-            >
-              <Suspense fallback={<div>Loading</div>}>
-                <DataTablePage />
-              </Suspense>
-            </ErrorBoundary>
-          )}
-        </QueryErrorResetBoundary>
-      }
-    />
-  </Routes>
-);
+const queryClient = new QueryClient();
+
+const router = createBrowserRouter([
+  {
+    path: "/12",
+    Component: () => (
+      <Suspense fallback={<div>loading</div>}>
+        <DataTablePage />
+      </Suspense>
+    ),
+    ErrorBoundary: DataTableErrorBoundary,
+    loader: DataTableLoader(queryClient),
+  },
+]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
