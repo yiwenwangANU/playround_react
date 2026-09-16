@@ -1,1 +1,1 @@
-export { default } from "./DateTablePage";
+export { default } from "./DataTablePage";

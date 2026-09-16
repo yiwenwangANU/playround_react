@@ -1,4 +1,4 @@
-import createFetcher from "@/utils/createFetcher";
+import createBaseFetcher from "@/utils/createBaseFetcher";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import queryString from "query-string";
 import { z } from "zod";
@@ -23,17 +23,16 @@ const schema = z.object({
   total: z.number(),
 });
 
-const fetcher = createFetcher(schema, import.meta.env.VITE_USER_BASE_URL);
+const fetcher = createBaseFetcher(
+  schema,
+  import.meta.env.VITE_DATATABLE_BASE_URL,
+);
 
-const userQuery = (query: Query) => ({
-  queryKey: ["users", query],
-  queryFn: () => fetcher(`?${queryString.stringify(query)}`),
-  staleTime: 30_000,
-});
-
-const useUsers = (query: Query) => {
-  const { data } = useSuspenseQuery(userQuery(query));
-
+const useDataTable = (query: Query) => {
+  const { data } = useSuspenseQuery({
+    queryKey: ["dataTable", query],
+    queryFn: () => fetcher(`?${queryString.stringify(query)}`),
+  });
   const users = data.users.map((user) => ({
     id: user.id,
     name: `${user.firstName} ${user.lastName}`,
@@ -44,4 +43,4 @@ const useUsers = (query: Query) => {
   return { users, total: data.total };
 };
 
-export { useUsers, userQuery };
+export default useDataTable;

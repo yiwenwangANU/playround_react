@@ -1,7 +1,7 @@
 import axios from "axios";
-import type z from "zod";
+import { z } from "zod";
 
-const createFetcher =
+const createBaseFetcher =
   <T extends z.ZodType>(schema: T, baseURL: string) =>
   async (url: string) => {
     const response = await axios.get<unknown>(url, { baseURL });
@@ -9,4 +9,4 @@ const createFetcher =
     return data;
   };
 
-export default createFetcher;
+export default createBaseFetcher;

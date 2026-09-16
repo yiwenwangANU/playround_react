@@ -1,13 +1,6 @@
-import { lazy, Suspense } from "react";
-import { createBrowserRouter } from "react-router";
-import { RouterProvider } from "react-router/dom";
-import DataTableErrorBoundary from "./pages/DataTablePage/DataTableErrorBoundary";
-import { QueryClient } from "@tanstack/react-query";
-import DataTableLoader from "./pages/DataTablePage/DataTableLoader";
-
-const DataTablePage = lazy(() => import("./pages/DataTablePage"));
-
-const queryClient = new QueryClient();
+import { Suspense } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import DataTablePage from "@/pages/DataTablePage";
 
 const router = createBrowserRouter([
   {
@@ -17,8 +10,7 @@ const router = createBrowserRouter([
         <DataTablePage />
       </Suspense>
     ),
-    ErrorBoundary: DataTableErrorBoundary,
-    loader: DataTableLoader(queryClient),
+    ErrorBoundary: () => <div>Something goes wrong</div>,
   },
 ]);
 
