@@ -14,7 +14,7 @@ const DiceRollerPage: FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
+    <div className="space-y-2 w-fit mx-auto">
       <Form onSubmit={handleSubmit} />
       {diceFaces.length !== 0 && <DicePanel diceFaces={diceFaces} />}
     </div>

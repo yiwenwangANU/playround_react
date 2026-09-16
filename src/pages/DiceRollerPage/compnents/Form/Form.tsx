@@ -14,8 +14,8 @@ const Form: FC<Props> = ({ onSubmit }) => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-      <label htmlFor="diceNum" className="col-span-2">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+      <label htmlFor="diceNum">
         Num of dice
       </label>
       <div className="flex gap-2">
@@ -30,7 +30,7 @@ const Form: FC<Props> = ({ onSubmit }) => {
         </button>
       </div>
       {errors.diceNum && (
-        <div className="col-span-2 text-rose-500">{errors.diceNum.message}</div>
+        <div className="text-rose-500">{errors.diceNum.message}</div>
       )}
     </form>
   );
