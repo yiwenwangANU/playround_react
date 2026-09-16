@@ -1,33 +1,44 @@
 import { useState, type FC } from "react";
 import { Heart, LoaderCircle } from "lucide-react";
-import useLike from "./hooks/useLike";
-import Button from "../../components/Button";
-
-const URL = "https://questions.greatfrontend.com/api/questions/like-button";
+import Button from "@/components/Button";
+import useUpdateLike from "./hooks/useUpdateLike";
 
 const LikeButtonPage: FC = () => {
-  const [liked, setLiked] = useState<boolean>(false);
-
-  const { trigger, isMutating, error } = useLike(URL);
-  const handleClick = () => {
-    trigger(
-      { action: liked ? "unlike" : "like" },
-      { onSuccess: () => setLiked((prev) => !prev) },
-    );
-  };
+  const [like, setLike] = useState<boolean>(false);
+  const mutation = useUpdateLike();
 
   return (
-    <>
-      <Button variant={liked ? "secondary" : "primary"} onClick={handleClick}>
-        {isMutating ? (
-          <LoaderCircle className="mr-1 h-5 w-5 animate-spin" />
+    <div>
+      <Button
+        variant={like ? "secondary" : "primary"}
+        onClick={() => {
+          if (like) {
+            mutation.mutate(
+              { action: "unlike" },
+              {
+                onSuccess: () => setLike(false),
+              },
+            );
+          }
+          if (!like) {
+            mutation.mutate(
+              { action: "like" },
+              { onSuccess: () => setLike(true) },
+            );
+          }
+        }}
+      >
+        {mutation.isPending ? (
+          <LoaderCircle className="mr-1.5 h-4 w-4 animate-spin" />
         ) : (
-          <Heart />
+          <Heart className="mr-1.5 h-4 w-4" />
         )}
         Like
       </Button>
-      {error && <div className="text-red-500">{error.message}</div>}
-    </>
+      {mutation.error && (
+        <div className="text-rose-500">{mutation.error.message}</div>
+      )}
+    </div>
   );
 };
 

@@ -1,10 +1,14 @@
-import { Routes, Route } from "react-router";
-import LikeButtonPage from "./pages/LikeButtonPage";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
+import LikeButtonPage from "./pages/LikeButtonPage/LikeButtonPage";
 
-const App = () => (
-  <Routes>
-    <Route index element={<LikeButtonPage />} />
-  </Routes>
-);
+const router = createBrowserRouter([
+  {
+    path: "/15",
+    Component: () => <LikeButtonPage />,
+  },
+]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
