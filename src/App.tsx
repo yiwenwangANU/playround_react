@@ -1,10 +1,14 @@
-import { Routes, Route } from "react-router";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
 import DiceRollerPage from "./pages/DiceRollerPage";
 
-const App = () => (
-  <Routes>
-    <Route index element={<DiceRollerPage />} />
-  </Routes>
-);
+const router = createBrowserRouter([
+  {
+    path: "/13",
+    Component: DiceRollerPage,
+  },
+]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
