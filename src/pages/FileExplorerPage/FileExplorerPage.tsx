@@ -46,6 +46,6 @@ const DATA = [
   },
 ];
 
-const FileExplorerPage: FC = () => <FileExplorer fileObjects={DATA} />;
+const FileExplorerPage: FC = () => <FileExplorer files={DATA} />;
 
 export default FileExplorerPage;

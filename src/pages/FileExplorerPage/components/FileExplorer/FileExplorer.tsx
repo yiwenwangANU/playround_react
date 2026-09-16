@@ -1,53 +1,46 @@
 import { useState, type FC } from "react";
-import clsx from "clsx";
 
-type FileObject = {
+type File = {
   id: number;
   name: string;
-  children?: FileObject[];
+  children?: File[];
 };
 
 interface Props {
-  fileObjects: FileObject[];
+  files: File[];
+  className?: string;
 }
 
-const FileExplorer: FC<Props> = ({ fileObjects }) => {
+const FileExplorer: FC<Props> = ({ files, className }) => {
   const [expendedIDs, setExpendedIDs] = useState(new Set());
+
   return (
-    <div>
-      {fileObjects.map((fileObject) => (
-        <>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setExpendedIDs((prev) => {
-                const newSet = new Set(prev);
-                if (newSet.has(fileObject.id)) {
-                  newSet.delete(fileObject.id);
+    <div className={className}>
+      {files.map((file) => (
+        <div key={file.id}>
+          {!file.children && <div>{file.name}</div>}
+          {file.children && (
+            <button
+              className="font-bold"
+              onClick={() => {
+                setExpendedIDs((prev) => {
+                  const newSet = new Set(prev);
+                  if (newSet.has(file.id)) {
+                    newSet.delete(file.id);
+                    return newSet;
+                  }
+                  newSet.add(file.id);
                   return newSet;
-                }
-                newSet.add(fileObject.id);
-                return newSet;
-              });
-            }}
-            key={fileObject.id}
-            className={clsx(
-              "block",
-              { "cursor-pointer font-bold": fileObject.children },
-              { "font-medium": !fileObject.children },
-            )}
-          >
-            {fileObject.name}
-            {fileObject.children && (
-              <span> [{expendedIDs.has(fileObject.id) ? "-" : "+"}]</span>
-            )}
-          </button>
-          {fileObject.children && expendedIDs.has(fileObject.id) && (
-            <div className="ml-2">
-              <FileExplorer fileObjects={fileObject.children} />
-            </div>
+                });
+              }}
+            >
+              {file.name} {expendedIDs.has(file.id) ? "[-]" : "[+]"}
+            </button>
           )}
-        </>
+          {expendedIDs.has(file.id) && file.children && (
+            <FileExplorer files={file.children} className="ml-2" />
+          )}
+        </div>
       ))}
     </div>
   );
