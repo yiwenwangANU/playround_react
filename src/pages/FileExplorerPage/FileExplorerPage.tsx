@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import File from "./components/File";
+import FileExplorer from "@/pages/FileExplorerPage/components/FileExplorer";
 
 const DATA = [
   {
@@ -45,14 +45,7 @@ const DATA = [
     ],
   },
 ];
-const FileExplorerPage: FC = () =>
-  DATA.map((file) => (
-    <File
-      id={file.id}
-      name={file.name}
-      children={file.children}
-      key={file.id}
-    />
-  ));
+
+const FileExplorerPage: FC = () => <FileExplorer fileObjects={DATA} />;
 
 export default FileExplorerPage;
