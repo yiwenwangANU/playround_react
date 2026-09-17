@@ -1,18 +1,13 @@
-import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router";
-const TodoListPage = lazy(() => import("./pages/TodoListPage"));
+import { createBrowserRouter, RouterProvider } from "react-router";
+import TodoListPage from "./pages/TodoListPage/TodoListPage";
 
-const App = () => (
-  <Routes>
-    <Route
-      path="/18"
-      element={
-        <Suspense fallback={<div>TodoList Page Loading</div>}>
-          <TodoListPage />
-        </Suspense>
-      }
-    />
-  </Routes>
-);
+const router = createBrowserRouter([
+  {
+    path: "/18",
+    Component: TodoListPage,
+  },
+]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
