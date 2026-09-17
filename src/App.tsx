@@ -1,10 +1,16 @@
-import { Routes, Route } from "react-router";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
 import TabsPage from "./pages/TabsPage";
 
+const router = createBrowserRouter([
+  {
+    path: "/11",
+    Component: TabsPage
+  },
+]);
+
 const App = () => (
-  <Routes>
-    <Route path="/11" element={<TabsPage />} />
-  </Routes>
+  <RouterProvider router={router} />
 );
 
 export default App;
