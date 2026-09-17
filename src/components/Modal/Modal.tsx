@@ -1,25 +1,38 @@
-import type { FC, ReactNode } from "react";
-import { createPortal } from "react-dom";
-import { twMerge } from "tailwind-merge";
+import { useRef, useEffect, type FC, type ReactNode } from "react";
 
 interface Props {
+  open: boolean;
+  onClose: () => void;
   children: ReactNode;
-  className?: string;
 }
 
-const Modal: FC<Props> = ({ children, className }) =>
-  createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div
-        className={twMerge(
-          "flex flex-col items-center justify-center gap-3 p-6",
-          className,
-        )}
-      >
-        {children}
-      </div>
-    </div>,
-    document.body,
+const Modal: FC<Props> = ({ open, onClose, children }) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (!dialogRef.current) return;
+    if (open) {
+      dialogRef.current.showModal();
+    } else {
+      dialogRef.current.close();
+    }
+  }, [open]);
+
+  return (
+    <dialog
+      className="m-auto w-200 rounded p-6 backdrop:bg-black/50"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+      ref={dialogRef}
+      onClose={onClose}
+    >
+      {children}
+      <button onClick={onClose}>Close</button>
+    </dialog>
   );
+};
 
 export default Modal;

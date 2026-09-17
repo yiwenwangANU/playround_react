@@ -1,10 +1,14 @@
-import { Routes, Route } from "react-router";
-import ModalDialogPage from "./pages/ModalDialogPage/ModalDialogPage";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
+import ModalDialogPage from "./pages/ModalDialogPage";
 
-const App = () => (
-  <Routes>
-    <Route index element={<ModalDialogPage />} />
-  </Routes>
-);
+const router = createBrowserRouter([
+  {
+    path: "/16",
+    Component: ModalDialogPage,
+  },
+]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
