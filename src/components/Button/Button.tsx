@@ -2,12 +2,12 @@ import type { ComponentProps, FC, ReactNode } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const button = tv({
-  base: "inline-flex cursor-pointer items-center justify-center rounded-full px-4 py-1.5 font-medium select-none",
+  base: "inline-flex cursor-pointer items-center justify-center rounded px-2 py-1 font-medium select-none font-thin text-sm",
   variants: {
     variant: {
       primary:
-        "border border-black rounded hover:border-violet-500 hover:text-violet-500",
-      secondary: "bg-zinc-100 text-zinc-900",
+        "border border-black hover:border-violet-600 hover:text-violet-600",
+      secondary: "border border-violet-600 text-white bg-violet-600",
       tertiary: "text-zinc-600",
     },
   },

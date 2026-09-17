@@ -1,8 +1,7 @@
 import Button from "@/components/Button";
 import { useState, type FC } from "react";
-import clsx from "clsx";
 
-const DATA = [
+const LANGUAGES: FrontEndLanguage[] = [
   {
     title: "HTML",
     content:
@@ -18,24 +17,27 @@ const DATA = [
   },
 ];
 
+type FrontEndLanguage = {
+  title: string;
+  content: string;
+};
+
 const TabsPage: FC = () => {
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
 
   return (
-    <div className="mx-auto w-120 space-y-2">
+    <div className="mx-auto w-200">
       <div className="flex gap-2">
-        {DATA.map((tab, i) => (
+        {LANGUAGES.map((language, i) => (
           <Button
-            onClick={() => setActiveTab(i)}
-            className={clsx({
-              "bg-violet-500 text-white hover:text-white": i == activeTab,
-            })}
+            variant={activeIndex === i ? "secondary" : "primary"}
+            onClick={() => setActiveIndex(i)}
           >
-            {tab.title}
+            {language.title}
           </Button>
         ))}
       </div>
-      <div>{DATA[activeTab].content}</div>
+      <div>{LANGUAGES[activeIndex].content}</div>
     </div>
   );
 };

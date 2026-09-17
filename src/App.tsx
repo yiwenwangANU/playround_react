@@ -5,12 +5,10 @@ import TabsPage from "./pages/TabsPage";
 const router = createBrowserRouter([
   {
     path: "/11",
-    Component: TabsPage
+    Component: TabsPage,
   },
 ]);
 
-const App = () => (
-  <RouterProvider router={router} />
-);
+const App = () => <RouterProvider router={router} />;
 
 export default App;
