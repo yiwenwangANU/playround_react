@@ -1,36 +1,38 @@
 import { useEffect, useState, type FC } from "react";
+import clsx from "clsx";
 
-type TrafficLight = {
-  color: "red" | "green" | "yellow";
-  duration: number;
-};
-
-const DATA: TrafficLight[] = [
-  { color: "red", duration: 4000 },
-  { color: "green", duration: 3000 },
-  { color: "yellow", duration: 500 },
+const LIGHTS = [
+  {
+    color: "red",
+    time: 4000,
+    className: "bg-rose-500",
+    position: 0,
+  },
+  { color: "green", time: 3000, className: "bg-amber-500", position: 2 },
+  { color: "yellow", time: 500, className: "bg-green-500", position: 0 },
 ];
 
-const LIGHT_SEQUENCE = ["red", "yellow", "green"];
-
 const TrafficLightPage: FC = () => {
-  const [index, setIndex] = useState<number>(0);
-  
+  const [lightIndex, setLightIndex] = useState<number>(0);
+
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setIndex((prev) => (prev + 1) % DATA.length);
-    }, DATA[index].duration);
-    return () => clearTimeout(timeoutId);
-  }, [index]);
+    const timer = setTimeout(() => {
+      setLightIndex((prev) => (prev + 1) % LIGHTS.length);
+    }, LIGHTS[lightIndex].time);
+    return () => clearTimeout(timer);
+  }, [lightIndex]);
 
   return (
-    <div className="flex w-fit gap-2 rounded-2xl bg-black px-5 py-2">
-      {LIGHT_SEQUENCE.map((light) => (
+    <div className="flex w-fit gap-2 rounded-2xl bg-black p-4">
+      {LIGHTS.map((_, i) => (
         <div
-          className="h-10 w-10 rounded-full"
-          style={{
-            backgroundColor: DATA[index].color === light ? light : "gray",
-          }}
+          className={clsx(
+            "h-10 w-10 rounded-full",
+            LIGHTS[lightIndex].className,
+            {
+              "opacity-30": LIGHTS[lightIndex].position === i,
+            },
+          )}
         />
       ))}
     </div>

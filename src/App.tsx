@@ -1,10 +1,14 @@
-import { Routes, Route } from "react-router";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
 import TrafficLightPage from "./pages/TrafficLightPage";
 
-const App = () => (
-  <Routes>
-    <Route index element={<TrafficLightPage />} />
-  </Routes>
-);
+const router = createBrowserRouter([
+  {
+    path: "/19",
+    Component: TrafficLightPage,
+  },
+]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
