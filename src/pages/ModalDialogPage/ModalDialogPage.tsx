@@ -1,4 +1,4 @@
-import Modal from "@/components/Modal";
+import Modal2 from "@/components/Modal2";
 import { useState, type FC } from "react";
 const DATA = {
   title: "Modal Dialog",
@@ -11,10 +11,14 @@ const ModalDialogPage: FC = () => {
   return (
     <>
       <button onClick={() => setOpen(true)}>Open</button>
-      <Modal open={open} onClose={() => setOpen(false)} className="space-y-2">
+      {/* <Modal open={open} onClose={() => setOpen(false)} className="space-y-2">
         <div className="text-center text-2xl font-bold">{DATA.title}</div>
         <div>{DATA.content}</div>
-      </Modal>
+      </Modal> */}
+      <Modal2 open={open} onClose={() => setOpen(false)} className="space-y-2">
+        <div className="text-center text-2xl font-bold">{DATA.title}</div>
+        <div>{DATA.content}</div>
+      </Modal2>
     </>
   );
 };
