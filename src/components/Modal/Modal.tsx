@@ -1,14 +1,15 @@
-import { useRef, useEffect, type FC, type ReactNode } from "react";
+import { useEffect, useRef, type FC, type ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
+  className?: string;
 }
 
-const Modal: FC<Props> = ({ open, onClose, children }) => {
+const Modal: FC<Props> = ({ open, onClose, children, className }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-
   useEffect(() => {
     if (!dialogRef.current) return;
     if (open) {
@@ -20,17 +21,19 @@ const Modal: FC<Props> = ({ open, onClose, children }) => {
 
   return (
     <dialog
-      className="m-auto w-200 rounded p-6 backdrop:bg-black/50"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
-      }}
+      className="m-auto rounded backdrop:bg-black/50"
       ref={dialogRef}
       onClose={onClose}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
     >
-      {children}
-      <button onClick={onClose}>Close</button>
+      <div className={twMerge("w-200 p-7", className)}>
+        {children}
+        <button onClick={onClose} className="mx-auto block w-fit">
+          Close
+        </button>
+      </div>
     </dialog>
   );
 };
