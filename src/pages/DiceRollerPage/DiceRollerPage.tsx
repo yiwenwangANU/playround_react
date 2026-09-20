@@ -1,22 +1,20 @@
 import { useState, type FC } from "react";
-import Form from "./compnents/Form";
-import type { Schema } from "./dataRollerSchema";
-import DicePanel from "./compnents/DicePanel";
+import Form from "./components/Form";
+import DicePanel from "./components/DicePanel";
 
 const DiceRollerPage: FC = () => {
-  const [diceFaces, setDiceFaces] = useState<number[]>([]);
-
-  const handleSubmit = (data: Schema) => {
-    const faces = Array.from({ length: data.diceNum }, () =>
+  const [diceList, setDiceList] = useState<number[]>([]);
+  const handleSubmit = (diceNum: number) => {
+    const diceList = Array.from({ length: diceNum }, () =>
       Math.floor(Math.random() * 6),
     );
-    setDiceFaces(faces);
+    setDiceList(diceList);
   };
-
+  
   return (
-    <div className="space-y-2 w-fit mx-auto">
+    <div className="flex flex-col gap-2 justify-center items-center">
       <Form onSubmit={handleSubmit} />
-      {diceFaces.length !== 0 && <DicePanel diceFaces={diceFaces} />}
+      <DicePanel diceList={diceList} />
     </div>
   );
 };
