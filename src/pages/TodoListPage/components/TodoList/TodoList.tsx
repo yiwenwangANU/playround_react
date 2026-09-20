@@ -9,7 +9,12 @@ const TodoList: FC = () => {
       {todoList.map((todo) => (
         <li key={todo.id}>
           {todo.content}
-          <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          <button
+            className="rounded border border-gray-400 bg-gray-200 px-2 py-0.5"
+            onClick={() => deleteTodo(todo.id)}
+          >
+            Delete
+          </button>
         </li>
       ))}
     </ul>
