@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const schema = z.object({
+export const schema = z.object({
   users: z.array(
     z.object({
       id: z.number(),
@@ -14,7 +14,3 @@ const schema = z.object({
   ),
   total: z.number(),
 });
-
-type Schema = z.infer<typeof schema>;
-
-export { schema, type Schema };
