@@ -23,22 +23,25 @@ type FrontEndLanguage = {
 };
 
 const TabsPage: FC = () => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-
+  const [activeTab, setActiveTab] = useState<number>(0);
   return (
-    <div className="mx-auto w-200">
+    <>
       <div className="flex gap-2">
         {LANGUAGES.map((language, i) => (
           <Button
-            variant={activeIndex === i ? "secondary" : "primary"}
-            onClick={() => setActiveIndex(i)}
+            variant={activeTab === i ? "secondary" : "primary"}
+            onClick={() => setActiveTab(i)}
+            role="tab"
+            aria-selected={i === activeTab}
+            aria-controls={`tabpanel-${i}`}
+            id={`tab-${i}`}
           >
             {language.title}
           </Button>
         ))}
       </div>
-      <div>{LANGUAGES[activeIndex].content}</div>
-    </div>
+      <div role="tabpanel" aria-labelledby={`tab-${activeTab}`}>{LANGUAGES[activeTab].content}</div>
+    </>
   );
 };
 
