@@ -1,49 +1,48 @@
 import { useState, type FC } from "react";
+import clsx from "clsx";
 
-type File = {
+type FileData = {
   id: number;
   name: string;
-  children?: File[];
+  children?: FileData[];
 };
 
 interface Props {
-  files: File[];
-  className?: string;
+  files: FileData[];
 }
 
-const FileExplorer: FC<Props> = ({ files, className }) => {
-  const [expendedIDs, setExpendedIDs] = useState(new Set());
+const FileExplorer: FC<Props> = ({ files }) => {
+  const [expandedIndex, setExpandedIndex] = useState<number[]>([]);
 
   return (
-    <div className={className}>
+    <div>
       {files.map((file) => (
-        <div key={file.id}>
-          {!file.children && <div>{file.name}</div>}
-          {file.children && (
-            <button
-              className="font-bold"
-              onClick={() => {
-                setExpendedIDs((prev) => {
-                  const newSet = new Set(prev);
-                  if (newSet.has(file.id)) {
-                    newSet.delete(file.id);
-                    return newSet;
+        <>
+          <div className={clsx({ "font-bold": file.children })}>
+            {file.name}{" "}
+            {file.children && (
+              <span
+              className="cursor-pointer"
+                onClick={() => {
+                  if (expandedIndex.includes(file.id)) {
+                    setExpandedIndex((prev) =>
+                      prev.filter((id) => id !== file.id),
+                    );
+                    return;
                   }
-                  newSet.add(file.id);
-                  return newSet;
-                });
-              }}
-            >
-              {file.name} {expendedIDs.has(file.id) ? "[-]" : "[+]"}
-            </button>
+                  setExpandedIndex((prev) => [...prev, file.id]);
+                }}
+              >
+                {`[${expandedIndex.includes(file.id) ? "-" : "+"}]`}
+              </span>
+            )}
+          </div>
+          {file.children && expandedIndex.includes(file.id) && (
+            <FileExplorer files={file.children} />
           )}
-          {expendedIDs.has(file.id) && file.children && (
-            <FileExplorer files={file.children} className="ml-2" />
-          )}
-        </div>
+        </>
       ))}
     </div>
   );
 };
-
 export default FileExplorer;
