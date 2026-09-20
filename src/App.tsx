@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-import TodoListPage from "./pages/TodoListPage/TodoListPage";
+import TodoListPage from "./pages/TodoListPage";
 
 const router = createBrowserRouter([
   {
