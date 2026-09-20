@@ -1,44 +1,39 @@
+import Button from "@/components/Button";
 import { useState, type FC } from "react";
 import { Heart, LoaderCircle } from "lucide-react";
-import Button from "@/components/Button";
 import useUpdateLike from "./hooks/useUpdateLike";
 
 const LikeButtonPage: FC = () => {
   const [like, setLike] = useState<boolean>(false);
-  const mutation = useUpdateLike();
+  const { mutate, data, isPending, error } = useUpdateLike();
 
+  const handleClick = () => {
+    mutate(like ? "unlike" : "like", {
+      onSuccess: () => setLike((prev) => !prev),
+    });
+  };
+  
   return (
-    <div>
+    <>
       <Button
         variant={like ? "secondary" : "primary"}
-        onClick={() => {
-          if (like) {
-            mutation.mutate(
-              { action: "unlike" },
-              {
-                onSuccess: () => setLike(false),
-              },
-            );
-          }
-          if (!like) {
-            mutation.mutate(
-              { action: "like" },
-              { onSuccess: () => setLike(true) },
-            );
-          }
-        }}
+        onClick={handleClick}
+        disable={isPending}
       >
-        {mutation.isPending ? (
-          <LoaderCircle className="mr-1.5 h-4 w-4 animate-spin" />
-        ) : (
-          <Heart className="mr-1.5 h-4 w-4" />
-        )}
+        {
+          <span>
+            {isPending ? (
+              <LoaderCircle className="mr-1 h-4 w-4 animate-spin" />
+            ) : (
+              <Heart className="mr-1 h-4 w-4" />
+            )}
+          </span>
+        }
         Like
       </Button>
-      {mutation.error && (
-        <div className="text-rose-500">{mutation.error.message}</div>
-      )}
-    </div>
+      {data && <div>{data.message}</div>}
+      {error && <div>{error.message}</div>}
+    </>
   );
 };
 
