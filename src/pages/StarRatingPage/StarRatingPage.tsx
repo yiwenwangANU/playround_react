@@ -1,17 +1,17 @@
 import { useState, type FC } from "react";
 import StarRating from "./components/StarRating/StarRating";
 
-const STARTING_STAR = 3;
-const MAX_STAR = 5;
-
+const INITIAL_RATE = 3;
 const StarRatingPage: FC = () => {
-  const [stars, setStars] = useState<number>(STARTING_STAR);
-  const handleSetStar = (stars: number) => {
-    setStars(stars);
-    console.log("stars: " + stars);
+  const [rate, setRate] = useState<number>(INITIAL_RATE);
+  const handleClickStar = (star: number) => {
+    setRate(star);
   };
   return (
-    <StarRating stars={stars} onSetStar={handleSetStar} maxStars={MAX_STAR} />
+    <>
+      <StarRating startRate={rate} maxStar={5} onClickStar={handleClickStar} />
+      <div>Star Rate {rate}</div>
+    </>
   );
 };
 

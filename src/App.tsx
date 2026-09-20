@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import StarRatingPage from "./pages/StarRatingPage/StarRatingPage";
+import StarRatingPage from "./pages/StarRatingPage";
 
 const router = createBrowserRouter([
   {
