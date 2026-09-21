@@ -1,5 +1,6 @@
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { type FC, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
 interface Props {
   open: boolean;
@@ -12,12 +13,13 @@ const Modal2: FC<Props> = ({ open, onClose, children }) => {
 
   if (!open) return;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 grid place-items-center bg-black/50">
       <div className="w-200 space-y-2 rounded-2xl bg-white p-7" ref={dialogRef}>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 
