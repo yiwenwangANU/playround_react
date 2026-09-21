@@ -1,24 +1,32 @@
 import type { FC } from "react";
-import { useSearchParams } from "react-router";
 
-const SHOW_PAGES = [5, 10, 20];
+const SELECT_OPTIONS = [
+  {
+    label: "show 5",
+    value: 5,
+  },
+  {
+    label: "show 10",
+    value: 10,
+  },
+  {
+    label: "show 20",
+    value: 20,
+  },
+];
 
-const Select: FC = () => {
-  const [, setSearchParams] = useSearchParams();
-  const handleLimitChange = (newLimit: number) => {
-    setSearchParams((prev) => ({ ...prev, skip: 0, limit: newLimit }));
-  };
+interface Props {
+  onSelect: (limit: number) => void;
+}
 
-  return (
-    <select
-      className="cursor-pointer rounded border border-gray-400 bg-gray-200 px-2 py-0.5"
-      onChange={(e) => handleLimitChange(Number(e.target.value))}
-    >
-      {SHOW_PAGES.map((page) => (
-        <option value={page}>show {page}</option>
-      ))}
-    </select>
-  );
-};
-
+const Select: FC<Props> = ({ onSelect }) => (
+  <select
+    className="rounded border border-black px-2 py-0.5"
+    onChange={(e) => onSelect(Number(e.target.value))}
+  >
+    {SELECT_OPTIONS.map((option) => (
+      <option value={option.value}>{option.label}</option>
+    ))}
+  </select>
+);
 export default Select;

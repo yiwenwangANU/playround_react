@@ -5,7 +5,7 @@ const router = createBrowserRouter([
   {
     path: "/12",
     Component: DataTablePage,
-    ErrorBoundary: () => <div>Error</div>,
+    ErrorBoundary: () => <div>Something went wrong!</div>,
   },
 ]);
 
