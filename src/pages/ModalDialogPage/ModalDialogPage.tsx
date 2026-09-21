@@ -11,13 +11,9 @@ const ModalDialogPage: FC = () => {
     <>
       <button onClick={() => setOpen(true)}>Open</button>
       <Modal2 open={open} onClose={() => setOpen(false)}>
-        <div className="flex flex-col items-center justify-center gap-2">
-          <h1>{TITLE}</h1>
-          <div>{CONTENT}</div>
-          <button onClick={() => setOpen(false)} className="w-fit">
-            Close
-          </button>
-        </div>
+        <h1>{TITLE}</h1>
+        <div>{CONTENT}</div>
+        <button onClick={() => setOpen(false)}>Close</button>
       </Modal2>
     </>
   );
