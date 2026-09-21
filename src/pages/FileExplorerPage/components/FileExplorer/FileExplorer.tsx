@@ -1,48 +1,46 @@
 import { useState, type FC } from "react";
 import clsx from "clsx";
 
-type FileData = {
+type File = {
   id: number;
   name: string;
-  children?: FileData[];
+  children?: File[];
 };
 
 interface Props {
-  files: FileData[];
+  files: File[];
 }
 
 const FileExplorer: FC<Props> = ({ files }) => {
-  const [expandedIndex, setExpandedIndex] = useState<number[]>([]);
+  const [expendedIndex, setExpendedIndex] = useState<number[]>([]);
 
-  return (
-    <div>
-      {files.map((file) => (
-        <>
-          <div className={clsx({ "font-bold": file.children })}>
-            {file.name}{" "}
-            {file.children && (
-              <span
-              className="cursor-pointer"
-                onClick={() => {
-                  if (expandedIndex.includes(file.id)) {
-                    setExpandedIndex((prev) =>
-                      prev.filter((id) => id !== file.id),
-                    );
-                    return;
-                  }
-                  setExpandedIndex((prev) => [...prev, file.id]);
-                }}
-              >
-                {`[${expandedIndex.includes(file.id) ? "-" : "+"}]`}
-              </span>
-            )}
-          </div>
-          {file.children && expandedIndex.includes(file.id) && (
-            <FileExplorer files={file.children} />
-          )}
-        </>
-      ))}
+  const handleClick = (id: number) => {
+    setExpendedIndex((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((index) => index !== id);
+      }
+      return [...prev, id];
+    });
+  };
+  
+  return files.map((file) => (
+    <div key={file.id}>
+      <div className={clsx("inline", { "font-bold": file.children })}>
+        {file.name}
+      </div>
+      {file.children && (
+        <button
+          className="inline cursor-pointer font-bold"
+          onClick={() => handleClick(file.id)}
+        >
+          [{expendedIndex.includes(file.id) ? "-" : "+"}]
+        </button>
+      )}
+      {file.children && expendedIndex.includes(file.id) && (
+        <FileExplorer files={file.children} />
+      )}
     </div>
-  );
+  ));
 };
+
 export default FileExplorer;
