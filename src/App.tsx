@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import LikeButtonPage from "./pages/LikeButtonPage/LikeButtonPage";
+import LikeButtonPage from "./pages/LikeButtonPage";
 
 const router = createBrowserRouter([
   {

@@ -1,9 +1,14 @@
 import axios from "axios";
 
-const updateLike = async (payload: "like" | "unlike") => {
-  const response = await axios.post(import.meta.env.VITE_LIKE_BUTTON_URL, {
-    action: payload,
-  });
+type LikePayLoad = {
+  action: "like" | "unlike";
+};
+
+const updateLike = async (payload: LikePayLoad) => {
+  const response = await axios.post(
+    import.meta.env.VITE_LIKE_BUTTON_URL,
+    payload,
+  );
   return response.data;
 };
 

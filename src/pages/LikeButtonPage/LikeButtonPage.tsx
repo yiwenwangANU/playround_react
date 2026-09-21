@@ -4,35 +4,35 @@ import { Heart, LoaderCircle } from "lucide-react";
 import useUpdateLike from "./hooks/useUpdateLike";
 
 const LikeButtonPage: FC = () => {
-  const [like, setLike] = useState<boolean>(false);
+  const [liked, setLiked] = useState<boolean>(false);
   const { mutate, data, isPending, error } = useUpdateLike();
-
   const handleClick = () => {
-    mutate(like ? "unlike" : "like", {
-      onSuccess: () => setLike((prev) => !prev),
-    });
+    mutate(
+      { action: liked ? "unlike" : "like" },
+      {
+        onSuccess: () => {
+          setLiked((prev) => !prev);
+        },
+      },
+    );
   };
-  
+
   return (
     <>
       <Button
-        variant={like ? "secondary" : "primary"}
+        disabled={isPending}
         onClick={handleClick}
-        disable={isPending}
+        variant={liked ? "secondary" : "primary"}
       >
-        {
-          <span>
-            {isPending ? (
-              <LoaderCircle className="mr-1 h-4 w-4 animate-spin" />
-            ) : (
-              <Heart className="mr-1 h-4 w-4" />
-            )}
-          </span>
-        }
+        {isPending ? (
+          <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Heart className="mr-2 h-4 w-4" />
+        )}
         Like
       </Button>
-      {data && <div>{data.message}</div>}
       {error && <div>{error.message}</div>}
+      {data && <div>{data.message}</div>}
     </>
   );
 };
