@@ -1,18 +1,11 @@
-import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router";
-const AccordionPage = lazy(() => import("./pages/AccordionPage"));
+import AccordionPage from "./pages/AccordionPage";
+import { createBrowserRouter } from "react-router";
 
-const App = () => (
-  <Routes>
-    <Route
-      path="/1"
-      element={
-        <Suspense fallback={<div>Accordion Page Loading</div>}>
-          <AccordionPage />
-        </Suspense>
-      }
-    />
-  </Routes>
-);
+const App = createBrowserRouter([
+  {
+    path: "/",
+    element: <AccordionPage />,
+  },
+]);
 
 export default App;
