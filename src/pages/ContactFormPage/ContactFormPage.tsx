@@ -1,49 +1,37 @@
 import type { FC } from "react";
+import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { FormProvider, useForm } from "react-hook-form";
-import Field from "./components/Field";
-import Button from "../../components/Button";
-import useCreateMessage from "./hooks/useCreateMessage";
+import InputField from "./components/InputField/InputField";
+import Button from "@components/Button";
+import createPost from "@utils/createPost";
 
 const schema = z.object({
-  name: z.string("Please enter your name."),
-  email: z.email("Please enter a valid email."),
-  message: z.string("Please enter your message."),
+  name: z.string("Name is required."),
+  email: z.email("Please privide a valid email."),
+  message: z.string("Message is required."),
 });
 
 export type Schema = z.infer<typeof schema>;
 
 const ContactFormPage: FC = () => {
   const methods = useForm({ resolver: zodResolver(schema) });
-  const { mutate, isPending, data, isError } = useCreateMessage();
-
-  const onSubmit = (data: Schema) => {
-    console.log(data);
-    mutate(data);
+  const onSubmit = async (data: Schema) => {
+    const response = await createPost(data);
+    alert(response.data);
   };
 
   return (
     <FormProvider {...methods}>
-      <div className="mx-auto w-120 space-y-2">
-        <form
-          onSubmit={methods.handleSubmit(onSubmit)}
-          className="grid grid-cols-[auto_1fr] gap-2"
-        >
-          <Field name="name" />
-          <Field name="email" />
-          <Field name="message" fieldType="textArea" />
-          <Button
-            className="col-span-2 w-fit"
-            type="submit"
-            disabled={isPending}
-          >
-            Submit
-          </Button>
-        </form>
-        {data && <div className="text-green-500">{data}</div>}
-        {isError && <div className="text-rose-500">Something went wrong.</div>}
-      </div>
+      <form
+        onSubmit={methods.handleSubmit(onSubmit)}
+        className="mx-auto flex w-100 flex-col gap-2"
+      >
+        <InputField label="name" name="name" />
+        <InputField label="email" name="email" />
+        <InputField label="message" name="message" />
+        <Button className="w-fit">Submit</Button>
+      </form>
     </FormProvider>
   );
 };

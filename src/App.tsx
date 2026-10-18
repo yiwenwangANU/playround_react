@@ -1,10 +1,13 @@
-import { Routes, Route } from "react-router";
+import { RouterProvider, createBrowserRouter } from "react-router";
 import ContactFormPage from "./pages/ContactFormPage";
 
-const App = () => (
-  <Routes>
-    <Route index element={<ContactFormPage />} />
-  </Routes>
-);
+const router = createBrowserRouter([
+  {
+    path: "/2",
+    element: <ContactFormPage />,
+  },
+]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
