@@ -2,14 +2,17 @@ import { useState, type FC } from "react";
 import ProgressBar from "./components/ProgressBar";
 
 const ProgesssBarPage: FC = () => {
-  const [numOfBar, setNumOfBar] = useState<number>(0);
+  const [count, setCount] = useState<number>(0);
   return (
-    <>
-      {Array.from({ length: numOfBar }, (_, i) => (
-        <ProgressBar key={i} />
-      ))}
-      <button onClick={() => setNumOfBar((prev) => prev + 1)}>Add</button>
-    </>
+    <main className="py-2 px-2 space-y-2">
+      {count !==0 && Array.from({length: count}, () => <ProgressBar />)}
+      <button
+        className="cursor-pointer rounded border border-black bg-black px-2 py-1 text-white"
+        onClick={() => setCount((prev) => prev + 1)}
+      >
+        Add
+      </button>
+    </main>
   );
 };
 
