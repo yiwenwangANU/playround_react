@@ -1,7 +1,14 @@
-import type { FC } from "react";
+import { useState, type FC } from "react";
 import Accordion from "./components/Accordion";
 
-const DATA = [
+type Tab = "HTML" | "CSS" | "JavaScript";
+
+type AccordionItem = {
+  title: Tab;
+  content: string;
+};
+
+const DATA: AccordionItem[] = [
   {
     title: "HTML",
     content:
@@ -19,12 +26,23 @@ const DATA = [
   },
 ];
 
-const AccordionPage: FC = () => (
-  <div role="group" aria-label="Accordion">
-    {DATA.map((item, i) => (
-      <Accordion key={i} title={item.title} content={item.content} />
-    ))}
-  </div>
-);
+const AccordionPage: FC = () => {
+  const [activeTab, setActiveTab] = useState<Tab | null>(null);
+  return (
+    <div>
+      {DATA.map((item) => (
+        <Accordion
+          key={item.title}
+          title={item.title}
+          content={item.content}
+          open={activeTab === item.title}
+          onToggle={() =>
+            setActiveTab((prev) => (prev === item.title ? null : item.title))
+          }
+        />
+      ))}
+    </div>
+  );
+};
 
 export default AccordionPage;

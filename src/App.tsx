@@ -1,11 +1,13 @@
 import AccordionPage from "./pages/AccordionPage";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
 
-const App = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <AccordionPage />,
   },
 ]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
