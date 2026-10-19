@@ -1,7 +1,7 @@
 import Input from "@/components/Input";
 import type { FC } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import type { Schema } from "../../schema";
+import type { Schema } from "../../../../schema";
 
 interface Props {
   name: "loanAmount" | "loanTerm" | "interestRate";
@@ -16,9 +16,13 @@ const Field: FC<Props> = ({ name, label }) => {
   const { field } = useController({ control, name });
 
   return (
-    <div className="grid-col-[1fr_1fr] grid">
+    <div className="grid grid-cols-[1fr_1fr]">
       <label htmlFor={name}>{label}</label>
-      <Input id={name} {...field} />
+      <Input
+        id={name}
+        value={field.value}
+        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+      />
       {errors[name] && (
         <div className="col-span-2 text-rose-500">{errors[name].message}</div>
       )}
