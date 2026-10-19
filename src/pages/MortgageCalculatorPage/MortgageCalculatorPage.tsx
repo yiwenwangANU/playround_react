@@ -1,7 +1,7 @@
 import { useState, type FC } from "react";
 import Form from "./components/Form";
 import type { Schema } from "./schema";
-import Mortgage from "./components/Form/components/Mortgage";
+import Mortgage from "./components/Mortgage";
 
 const MortgageCalculatorPage: FC = () => {
   const [mortgage, setMortgage] = useState<Schema | null>(null);
