@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Coverage directory used by vitest/coverage-v8
+coverage
+*.lcov

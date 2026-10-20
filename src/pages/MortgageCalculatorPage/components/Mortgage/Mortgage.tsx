@@ -19,7 +19,7 @@ const Mortgage: FC<Props> = ({ mortgage }) => {
     style: "currency",
     currency: "USD",
   });
-  
+
   return (
     <div className="space-y-2">
       <div>
