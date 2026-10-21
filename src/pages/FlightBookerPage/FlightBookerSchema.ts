@@ -1,36 +1,37 @@
-import { format, addDays } from "date-fns";
 import { z } from "zod";
 
-const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
-
-export const schema = z
+const schema = z
   .object({
     flightType: z.enum(["oneWay", "roundTrip"]),
-    departureDate: z.iso.date("Please provide departure date"),
+    departureDate: z.iso.date("Departure date is required."),
     returnDate: z.iso.date().optional(),
   })
-  .superRefine((data, ctx) => {
-    if (data.departureDate < tomorrow) {
+  .superRefine((val, ctx) => {
+    if (val.flightType === "oneWay" && val.returnDate) {
       ctx.addIssue({
         code: "custom",
+        message: "oneWay flight should not have returnDate",
         path: ["flightType"],
-        message: "Departure date should no early than tomorrow.",
       });
+      return;
     }
-    if (data.flightType === "roundTrip" && !data.returnDate) {
+    if (val.flightType === "roundTrip" && !val.returnDate) {
       ctx.addIssue({
         code: "custom",
+        message: "Round Trip flight needs return date.",
         path: ["returnDate"],
-        message: "Please provide return date.",
       });
+      return;
     }
-    if (data.returnDate && data.departureDate > data.returnDate) {
+    if (val.returnDate && val.returnDate < val.departureDate) {
       ctx.addIssue({
         code: "custom",
-        path: ["returnDate"],
         message: "Return date should no early than departure date.",
+        path: ["returnDate"],
       });
     }
   });
 
-export type Schema = z.infer<typeof schema>;
+type Schema = z.infer<typeof schema>;
+
+export { schema, type Schema };
