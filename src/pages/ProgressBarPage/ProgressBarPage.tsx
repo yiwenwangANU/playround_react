@@ -7,7 +7,7 @@ const ProgressBarPage: FC = () => {
   return (
     <div className="space-y-2">
       {PROGRESS.map((progress, i) => (
-        <ProgressBar progress={progress} />
+        <ProgressBar progress={progress} key={i}/>
       ))}
     </div>
   );
