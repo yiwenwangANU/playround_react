@@ -1,3 +1,4 @@
+import Input from "@/components/Input";
 import type { Schema } from "@/pages/GenerateTablePage/generateTableSchema";
 import type { FC } from "react";
 import { useController, useFormContext } from "react-hook-form";
@@ -12,24 +13,21 @@ const Field: FC<Props> = ({ name, label }) => {
     control,
     formState: { errors },
   } = useFormContext<Schema>();
-  const { field } = useController({ control, name });
+  const { field } = useController({ name, control });
 
   return (
-    <>
-      <label htmlFor={name} className="capitalize">
-        {label}:
-      </label>
-      <input
-        className="border border-black px-1 py-0.5"
-        {...field}
+    <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,3fr)]">
+      <label htmlFor={name}>{label}</label>
+      <Input
         id={name}
-        type="number"
+        {...field}
         onChange={(e) => field.onChange(e.target.valueAsNumber)}
+        type="number"
       />
       {errors[name] && (
         <div className="col-span-2 text-rose-500">{errors[name].message}</div>
       )}
-    </>
+    </div>
   );
 };
 

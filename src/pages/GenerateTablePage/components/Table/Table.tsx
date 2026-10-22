@@ -1,27 +1,27 @@
 import type { FC } from "react";
+import type { Schema } from "../../generateTableSchema";
 
 interface Props {
-  rows: number;
-  cols: number;
+  table: Schema;
 }
 
-const Table: FC<Props> = ({ rows, cols }) => (
-  <table>
-    <tbody className="border-t border-l border-black">
-      {Array.from({ length: rows }, (_, x) => (
-        <tr key={x}>
-          {Array.from({ length: cols }, (_, y) => (
-            <td
-              className="h-10 w-10 border-r border-b text-center"
-              key={`${x}-${y}`}
-            >
-              {y % 2 === 0 ? y * rows + x + 1 : (y + 1) * rows - x}
-            </td>
-          ))}
-        </tr>
-      ))}
-    </tbody>
-  </table>
-);
+const Table: FC<Props> = ({ table }) => {
+  const { rows, cols } = table;
+  return (
+    <table className="mx-auto my-10 w-fit border-t border-r text-center">
+      <tbody>
+        {Array.from({ length: rows }, (_, i) => (
+          <tr>
+            {Array.from({ length: cols }, (_, j) => (
+              <td className="h-7 w-7 border-b border-l">
+                {j % 2 === 0 ? i + j * rows + 1 : -i + (j + 1) * rows}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
 export default Table;

@@ -1,13 +1,10 @@
 import { z } from "zod";
 
-const positiveNumber = z
-  .number("Please enter a positive number.")
-  .int("Please enter a positive number.")
-  .gt(0, "Please enter a positive number.");
-
-export const schema = z.object({
-  rows: positiveNumber,
-  cols: positiveNumber,
+const schema = z.object({
+  rows: z.number().min(1),
+  cols: z.number().min(1),
 });
 
-export type Schema = z.infer<typeof schema>;
+type Schema = z.infer<typeof schema>;
+
+export { schema, type Schema };
