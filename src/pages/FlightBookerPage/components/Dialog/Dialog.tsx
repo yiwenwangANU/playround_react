@@ -18,7 +18,7 @@ const Dialog: FC<Props> = ({ open = false, onClose, flightInfo }) => {
       aria-describedby="dialog-description"
     >
       <h2 id="dialog-title" className="font-bold">
-        Your personal summary
+        Your flight summary
       </h2>
       <p id="dialog-description">
         You have booked a {flightType === "oneWay" ? "one-way" : "round-trip"}{" "}

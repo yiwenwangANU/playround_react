@@ -29,26 +29,29 @@ const FlightBookerPage: FC = () => {
   };
 
   return (
-    <FormProvider {...methods}>
-      <form
-        onSubmit={methods.handleSubmit(handleFormSubmit)}
-        className="mx-auto flex w-60 flex-col gap-2"
-      >
-        <Select />
-        <DatePicker name="departureDate" label="Departure Date" />
-        {flightType === "roundTrip" && (
-          <DatePicker name="returnDate" label="Return Date" />
-        )}
-        <button className="cursor-pointer rounded bg-black px-2 py-0.5 text-white">
-          Book
-        </button>
-      </form>
+    <>
+      <title>Flight Booker</title>
+      <FormProvider {...methods}>
+        <form
+          onSubmit={methods.handleSubmit(handleFormSubmit)}
+          className="mx-auto flex w-60 flex-col gap-2"
+        >
+          <Select />
+          <DatePicker name="departureDate" label="Departure Date" />
+          {flightType === "roundTrip" && (
+            <DatePicker name="returnDate" label="Return Date" />
+          )}
+          <button className="cursor-pointer rounded bg-black px-2 py-0.5 text-white">
+            Book
+          </button>
+        </form>
+      </FormProvider>
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
         flightInfo={flightInfo}
       />
-    </FormProvider>
+    </>
   );
 };
 
