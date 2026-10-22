@@ -5,18 +5,19 @@ interface Props {
 }
 
 const ProgressBar: FC<Props> = ({ progress }) => {
-  const refinedProgress = Math.max(Math.min(progress, 100), 0);
-
   return (
     <div
-      className="mx-10 h-4 overflow-hidden rounded-3xl border border-gray-400 bg-gray-200"
+      className="h-5 w-full overflow-hidden rounded-2xl border border-gray-400 bg-gray-200 text-center"
       role="progressbar"
+      aria-valuenow={progress}
+      aria-valuemax={100}
+      aria-valuemin={0}
     >
       <div
-        className="flex h-4 items-center justify-center overflow-clip bg-blue-500 text-sm text-white"
-        style={{ width: `${refinedProgress}%` }}
+        className="h-5 overflow-hidden bg-sky-600 text-sm text-white"
+        style={{ width: `${progress}%` }}
       >
-        {refinedProgress}%
+        {progress}%
       </div>
     </div>
   );
